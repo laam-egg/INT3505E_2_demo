@@ -11,7 +11,7 @@ Hệ thống được tổ chức theo kiến trúc Client-Server.
     - [Thiết kế database](./database_design.md)
     - [Tài liệu định nghĩa chi tiết các API](./api_endpoints.md)
 
-- Client/Frontend được lập trình bằng React/TypeScript
+- Client/Frontend được lập trình bằng TypeScript, React 18
     (không có SWC). Có sử dụng thư viện `antd` để
     vẽ UI, đặc biệt là hiển thị bảng dữ liệu, ví dụ
     danh sách các đầu sách. Client truy cập tới các API
