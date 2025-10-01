@@ -1,4 +1,4 @@
-# API Endpoints
+# API Endpoints (v1)
 
 Dưới đây liệt kê các API endpoints
 nhằm phục vụ đầy đủ các màn frontend,
@@ -22,48 +22,48 @@ nếu thấy cần thiết (not recommended).
 
 ## 1. Nhóm PATRONS
 
-### GET /api/patrons
+### GET /api/v1/patrons
 
-### GET /api/patrons/:patronId
+### GET /api/v1/patrons/:patronId
 
-### POST /api/patrons
+### POST /api/v1/patrons
 
-### PATCH /api/patrons/:patronId
+### PATCH /api/v1/patrons/:patronId
 
-### DELETE /api/patrons/:patronId
+### DELETE /api/v1/patrons/:patronId
 
 ## 2. Nhóm TITLES & COPIES
 
-### GET /api/titles
+### GET /api/v1/titles
 
-### GET /api/titles/:titleId
+### GET /api/v1/titles/:titleId
 
-### POST /api/titles
+### POST /api/v1/titles
 
-### PATCH /api/titles/:titleId
+### PATCH /api/v1/titles/:titleId
 
-### DELETE /api/titles/:titleId
+### DELETE /api/v1/titles/:titleId
 
-### GET /api/titles/:titleId/copies
+### GET /api/v1/titles/:titleId/copies
 
-### GET /api/titles/:titleId/copies/:copyId
+### GET /api/v1/titles/:titleId/copies/:copyId
 
-### POST /api/titles/:titleId/copies
+### POST /api/v1/titles/:titleId/copies
 
-### PATCH /api/titles/:titleId/copies/:copyId
+### PATCH /api/v1/titles/:titleId/copies/:copyId
 
-### DELETE /api/titles/:titleId/copies/:copyId
+### DELETE /api/v1/titles/:titleId/copies/:copyId
 
 ## 3. Nhóm BORROWS
 
-### GET /api/borrows?patronId
+### GET /api/v1/borrows?patronId
 
 patronId is optional.
 
-### GET /api/borrows/:borrowId
+### GET /api/v1/borrows/:borrowId
 
-### POST /api/borrows
+### POST /api/v1/borrows
 
-### PATCH /api/borrows/:borrowId
+### PATCH /api/v1/borrows/:borrowId
 
-### DELETE /api/borrows/:borrowId
+### DELETE /api/v1/borrows/:borrowId

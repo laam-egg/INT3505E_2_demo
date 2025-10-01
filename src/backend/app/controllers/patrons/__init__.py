@@ -9,7 +9,7 @@ Patron = patron_dto(patrons_controller)
 class PatronList(patrons_controller.Resource):
     @patrons_controller.doc("Get all patrons")
     def get(self):
-        return "<p>demo GET /api/patrons</p>"
+        return "<p>demo GET /api/v1/patrons</p>"
 
 @patrons_controller.route('/<int:id>')
 class PatronItem(patrons_controller.Resource):

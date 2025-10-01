@@ -6,7 +6,7 @@ titles_controller = Controller("titles", __name__)
 class TitleList(titles_controller.Resource):
     @titles_controller.doc("Get all titles")
     def get(self):
-        return "<p>demo GET /api/titles</p>"
+        return "<p>demo GET /api/v1/titles</p>"
     
 @titles_controller.route("/<int:id>")
 class TitleItem(titles_controller.Resource):

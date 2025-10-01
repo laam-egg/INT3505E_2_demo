@@ -1,6 +1,6 @@
 from .common import Controller
 
-api_controller = Controller("api", __name__)
+api_controller = Controller("api/v1", __name__)
 
 from .patrons import patrons_controller
 from .titles import titles_controller

@@ -4,9 +4,10 @@ Hệ thống được tổ chức theo kiến trúc Client-Server.
 
 - Server/Backend được lập trình bằng Python 3.12+, framework Flask. Có sử
     dụng Swagger (`flask-restx`). Có expose một endpoint riêng để hiển
-    thị Swagger UI (tại `/api/docs`) và một endpoint riêng
-    để trả về OAS JSON (tại `/api/json`). Tất cả các API
-    endpoint đều có prefix là `/api/...`. API tuân thủ
+    thị Swagger UI (tại `/api/vX/docs`) và một endpoint riêng
+    để trả về OAS JSON (tại `/api/vX/json`), trong đó `X` là
+    số phiên bản của API, hiện tại là 1. Tất cả các API
+    endpoint đều có prefix là `/api/vX...`. API tuân thủ
     REST chặt chẽ - đạt RMM level 3, có HATEOAS.
     - [Thiết kế database](./database_design.md)
     - [Tài liệu định nghĩa chi tiết các API](./api_endpoints.md)
