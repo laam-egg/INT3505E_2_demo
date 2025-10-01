@@ -1,3 +1,5 @@
 # Thiết kế hệ thống
 
-**TODO** Có thể có thiết kế API?
+[Kiến trúc hệ thống](./system_architecture.md)
+
+[Các API endpoints](./api_endpoints.md)

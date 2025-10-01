@@ -14,7 +14,7 @@
     - [C-TITLES(titleId)-COPIES](#c-titlestitleid-copies)
     - [U-TITLES(titleId)-COPIES(copyId)](#u-titlestitleid-copiescopyid)
   - [3. Nhóm BORROWS](#3-nhóm-borrows)
-    - [R-BORROWS](#r-borrows)
+    - [R-BORROWS(patronIds?)](#r-borrowspatronids)
     - [C-BORROW(titleId?, copyId?)](#c-borrowtitleid-copyid)
     - [U-BORROW(borrowId)](#u-borrowborrowid)
   - [Future Improvements](#future-improvements)
@@ -49,7 +49,9 @@ này.
   - Có pagination.
   - Mỗi hàng trong danh sách bao gồm:
     - Thông tin patron tương ứng.
-    - Nút `Xem tình trạng mượn sách`. onClick: redirect tới trang ???
+    - Nút `Xem tình trạng mượn sách`. onClick: redirect tới trang
+        [R-BORROWS(patronIds?)](#r-borrowspatronids) với tham số
+        `patronIds` là ID của patron được chọn, ví dụ `patronIds=1`.
     - Nút `Chỉnh sửa`. onClick: redirect tới trang [U-PATRON(id)](#u-patronid) tương ứng.
     - Nút `Xóa`. onClick: hỏi lại, nếu người dùng confirm thì xóa patron tương ứng.
 
@@ -152,6 +154,8 @@ Nhóm này bao gồm:
       - Có nút `Cho mượn`. onClick: redirect tới trang [C-BORROW(titleId?, copyId?)](#c-borrowtitleid-copyid), với tham số titleId, copyId tương ứng với copy của hàng.
     - Nếu tình trạng là đang được mượn, hoặc đã mất/hỏng:
       - Có nút `Xem lượt mượn`. onClick: redirect tới trang [U-BORROW(borrowId)](#u-borrowborrowid), với tham số borrowId tương ứng với copy của hàng.
+    - Nút `Sửa`. onClick: redirect tới [U-TITLES(titleId)-COPIES(copyId)](#u-titlestitleid-copiescopyid), truyền vào titleId và copyId tương ứng.
+    - Nút `Xóa`. onClick: hỏi lại người dùng, nếu confirm thì xóa bản sao tương ứng.
 
 ### C-TITLES(titleId)-COPIES
 
@@ -222,13 +226,25 @@ Chú ý, thông tin duy nhất
 về một lượt mượn mà người dùng có thể thay đổi (sau khi
 nó được tạo) là *trạng thái* của nó. Việc sửa đổi trạng
 thái được thực hiện qua các nút trên giao diện của trang
-[R-BORROWS](#r-borrows).
+[R-BORROWS(patronIds?)](#r-borrowspatronids).
 
-### R-BORROWS
+### R-BORROWS(patronIds?)
 
 - Summary: Xem lịch sử mượn sách/danh sách các borrows.
 - Input:
   - Trạng thái: Chọn trạng thái của các borrow sẽ hiển thị (tức lọc chúng theo trạng thái).
+  - Patrons: Dropdown cho phép chọn nhiều patrons - nếu
+    không chọn sẽ không lọc borrows theo patrons, nhưng
+    nếu chọn, borrows sẽ được lọc theo các patrons được
+    chọn. Dropdown đồng thời cập nhật patronIds tương
+    ứng với giá trị đang có trong dropdown. Như vậy,
+    nếu khi trang mới tải (on page load) mà query param
+    `patronIds?` tồn tại giá trị, thì dropdown cũng có
+    giá trị mặc định tương ứng, và áp dụng lọc borrows
+    ngay. Định dạng của tham số này là danh sách các
+    patron IDs được chọn, phân cách nhau bởi một dấu
+    phẩy. Nếu không chọn gì thì để trống. Ví dụ
+    `patronIds=`, `patronIds=1`, `patronIds=4,500,78,12`.
 - Output: Danh sách các lượt mượn sách (borrows)
   - Xếp theo thứ tự gần nhất trước (`statusLastUpdatedAt DESC`)
   - Có pagination.
@@ -251,7 +267,7 @@ thái được thực hiện qua các nút trên giao diện của trang
   - Tuy nhiên, giao diện hiển thị 2 dropdown cho người dùng dễ sử dụng.
   - Nếu query parameter `titleId?` được set, thì dropdown đầu tiên sẽ được chọn mặc định là đầu sách tương ứng.
   - Tương tự, nếu query parameter `copyId?` được set, thì dropdown thứ hai sẽ được chọn mặc định là cuốn sách (copy) tương ứng. Đồng thời, title ID tương ứng với copy này sẽ được set vào dropdown đầu tiên - có thể ghi đè giá trị cũ của dropdown đó nếu trước đó nó đã được set bởi query parameter `titleId?`.
-  - Việc chọn "mặc định" này giúp tạo thuận tiện cho người dùng khi click các nút cho mượn (lại) sách ở màn [R-BORROWS](#r-borrows), vừa giúp đảm bảo giao diện thống nhất - việc cho mượn sách chỉ cần diễn ra trên cùng một màn.
+  - Việc chọn "mặc định" này giúp tạo thuận tiện cho người dùng khi click các nút cho mượn (lại) sách ở màn [R-BORROWS(patronIds?)](#r-borrowspatronids), vừa giúp đảm bảo giao diện thống nhất - việc cho mượn sách chỉ cần diễn ra trên cùng một màn.
 
 - Input:
   - ID của copy cho mượn.
@@ -259,7 +275,7 @@ thái được thực hiện qua các nút trên giao diện của trang
 
 - Output:
   - Borrow mới được tạo ra với đầy đủ thông tin và được thêm vào hệ thống.
-  - Người dùng được redirect về trang [R-BORROWS](#r-borrows).
+  - Người dùng được redirect về trang [R-BORROWS(patronIds?)](#r-borrowspatronids).
 
 ### U-BORROW(borrowId)
 
@@ -267,12 +283,12 @@ thái được thực hiện qua các nút trên giao diện của trang
 - Giao diện:
   - Hiển thị các thông tin của lượt mượn.
   - Các nút `Trả sách`, `Báo mất/hỏng sách`, `Cho mượn lại`, `Trả/đền sách`
-    được hiển thị và có chức năng tương tự như đã trình bày ở mô tả trang [R-BORROWS](#r-borrows).
+    được hiển thị và có chức năng tương tự như đã trình bày ở mô tả trang [R-BORROWS(patronIds?)](#r-borrowspatronids).
 - Input:
   - Hành dộng bấm các nút kể trên.
 - Output:
   - Trạng thái của borrow được cập nhật.
-  - Người dùng được redirect về [R-BORROWS](#r-borrows).
+  - Người dùng được redirect về [R-BORROWS(patronIds?)](#r-borrowspatronids).
 
 
 
