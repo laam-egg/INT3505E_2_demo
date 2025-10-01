@@ -27,7 +27,11 @@
 
 ### Backend
 
-Yêu cầu Python 3.12+.
+Yêu cầu Python 3.12+,
+MongoDB 8.0+ (các phiên
+bản cũ hơn có thể vẫn
+chạy được, nhưng chưa được
+kiểm chứng.)
 
 ```sh
 cd <project_root>
@@ -38,9 +42,17 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Đồng thời trong thư mục `src/backend`,
+copy file `.env.example` vào file mới
+tên là `.env`. Sửa các biến môi trường
+trong file đó cho phù hợp.
+
 ### Frontend
 
-Yêu cầu Node.js 22+.
+Yêu cầu Node.js 22+ (các phiên
+bản cũ hơn có thể vẫn
+chạy được, nhưng chưa được
+kiểm chứng.)
 
 ```sh
 cd <project_root>
@@ -62,6 +74,20 @@ flask run --host=0.0.0.0 --port=5000
 ```
 
 ### Frontend
+
+Sau khi chạy backend, cần tạo lại
+OpenAPI contracts:
+
+```sh
+cd <project_root>
+cd src/frontend
+
+yarn api:sync
+```
+
+Từ đó về sau, nếu backend không có
+thay đổi về API, có thể chạy frontend
+như thông thường:
 
 ```sh
 cd <project_root>

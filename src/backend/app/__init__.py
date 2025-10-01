@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_restx import Api
+from flask_cors import CORS
 from .controllers import api_controller
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.get("/")
 def home_page():

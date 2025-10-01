@@ -7,12 +7,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api:sync": "openapi --input http://localhost:5000/api/v1/json --output ./src/api --useOptions --client axios"
   },
   "dependencies": {
     "antd": "^5.27.4",
+    "axios": "^1.12.2",
     "fast-xml-parser": "^5.2.5",
     "lodash": "^4.17.21",
+    "openapi-typescript-codegen": "^0.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.9.1",
