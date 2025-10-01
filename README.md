@@ -1,6 +1,6 @@
-# INT3505E 2 Demo: Hệ thông thư viện đơn giản
+# INT3505E 2 Demo: Hệ thống thư viện đơn giản
 
-- [INT3505E 2 Demo: Hệ thông thư viện đơn giản](#int3505e-2-demo-hệ-thông-thư-viện-đơn-giản)
+- [INT3505E 2 Demo: Hệ thống thư viện đơn giản](#int3505e-2-demo-hệ-thống-thư-viện-đơn-giản)
   - [Thông tin chung](#thông-tin-chung)
   - [Tài liệu thiết kế](#tài-liệu-thiết-kế)
   - [Setup](#setup)
@@ -11,6 +11,8 @@
     - [Frontend](#frontend-1)
 
 ![demo image](docs/images/frontend_demo_1.png)
+
+![demo image](docs/images/backend_demo_1.png)
 
 ## Thông tin chung
 
