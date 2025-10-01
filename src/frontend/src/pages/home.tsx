@@ -1,9 +1,9 @@
 export default function HomePage() {
     return <>
-    <h1>{"Home Page"}</h1>
+    <h1>{"Chào mừng đến với Hệ thống quản lý thư viện sách!"}</h1>
     <div>
-        <p>{"Welcome to the Vite + React 18 + TypeScript template!"}</p>
-        <p>{"It features React Router (BrowserRouter)."}</p>
+        <p>{"Hãy xem tùy chọn các mục ở sidebar bên trái."}</p>
+        <p><a target="_blank" href={import.meta.env.VITE_API_BASE_URL}>Truy cập backend server</a></p>
     </div>
     </>
 }

@@ -10,6 +10,8 @@
     - [Backend](#backend-1)
     - [Frontend](#frontend-1)
 
+![demo image](docs/images/frontend_demo_1.png)
+
 ## Thông tin chung
 
 - **Sinh viên:** Vũ Tùng Lâm 22028235 UET
