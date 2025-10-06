@@ -69,9 +69,9 @@ export class TitlesService {
     }): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/v1/titles/{title_id}',
+            url: '/api/v1/titles/{titleId}',
             path: {
-                'title_id': titleId,
+                'titleId': titleId,
             },
         });
     }
@@ -92,9 +92,9 @@ export class TitlesService {
     }): CancelablePromise<Title> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/titles/{title_id}',
+            url: '/api/v1/titles/{titleId}',
             path: {
-                'title_id': titleId,
+                'titleId': titleId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -120,9 +120,9 @@ export class TitlesService {
     }): CancelablePromise<Title> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/titles/{title_id}',
+            url: '/api/v1/titles/{titleId}',
             path: {
-                'title_id': titleId,
+                'titleId': titleId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -147,9 +147,9 @@ export class TitlesService {
     }): CancelablePromise<Array<Copy>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/titles/{title_id}/copies',
+            url: '/api/v1/titles/{titleId}/copies',
             path: {
-                'title_id': titleId,
+                'titleId': titleId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -175,9 +175,9 @@ export class TitlesService {
     }): CancelablePromise<Copy> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/titles/{title_id}/copies',
+            url: '/api/v1/titles/{titleId}/copies',
             path: {
-                'title_id': titleId,
+                'titleId': titleId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -199,10 +199,10 @@ export class TitlesService {
     }): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/v1/titles/{title_id}/copies/{copy_id}',
+            url: '/api/v1/titles/{titleId}/copies/{copyId}',
             path: {
-                'title_id': titleId,
-                'copy_id': copyId,
+                'titleId': titleId,
+                'copyId': copyId,
             },
         });
     }
@@ -225,10 +225,10 @@ export class TitlesService {
     }): CancelablePromise<Copy> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/titles/{title_id}/copies/{copy_id}',
+            url: '/api/v1/titles/{titleId}/copies/{copyId}',
             path: {
-                'title_id': titleId,
-                'copy_id': copyId,
+                'titleId': titleId,
+                'copyId': copyId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -256,10 +256,10 @@ export class TitlesService {
     }): CancelablePromise<Copy> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/titles/{title_id}/copies/{copy_id}',
+            url: '/api/v1/titles/{titleId}/copies/{copyId}',
             path: {
-                'title_id': titleId,
-                'copy_id': copyId,
+                'titleId': titleId,
+                'copyId': copyId,
             },
             headers: {
                 'X-Fields': xFields,

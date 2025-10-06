@@ -66,9 +66,9 @@ export class PatronsService {
     }): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/v1/patrons/{patron_id}',
+            url: '/api/v1/patrons/{patronId}',
             path: {
-                'patron_id': patronId,
+                'patronId': patronId,
             },
         });
     }
@@ -89,9 +89,9 @@ export class PatronsService {
     }): CancelablePromise<Patron> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/patrons/{patron_id}',
+            url: '/api/v1/patrons/{patronId}',
             path: {
-                'patron_id': patronId,
+                'patronId': patronId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -117,9 +117,9 @@ export class PatronsService {
     }): CancelablePromise<Patron> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/patrons/{patron_id}',
+            url: '/api/v1/patrons/{patronId}',
             path: {
-                'patron_id': patronId,
+                'patronId': patronId,
             },
             headers: {
                 'X-Fields': xFields,

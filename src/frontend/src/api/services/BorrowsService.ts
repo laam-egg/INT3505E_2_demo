@@ -74,9 +74,9 @@ export class BorrowsService {
     }): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/v1/borrows/{borrow_id}',
+            url: '/api/v1/borrows/{borrowId}',
             path: {
-                'borrow_id': borrowId,
+                'borrowId': borrowId,
             },
         });
     }
@@ -97,9 +97,9 @@ export class BorrowsService {
     }): CancelablePromise<Borrow> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/borrows/{borrow_id}',
+            url: '/api/v1/borrows/{borrowId}',
             path: {
-                'borrow_id': borrowId,
+                'borrowId': borrowId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -125,9 +125,9 @@ export class BorrowsService {
     }): CancelablePromise<Borrow> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/borrows/{borrow_id}',
+            url: '/api/v1/borrows/{borrowId}',
             path: {
-                'borrow_id': borrowId,
+                'borrowId': borrowId,
             },
             headers: {
                 'X-Fields': xFields,

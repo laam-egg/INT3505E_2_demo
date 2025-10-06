@@ -36,13 +36,13 @@ class PatronList(patrons_controller.Resource):
         
         return serialize_mongo_doc(patron_doc), 201
 
-@patrons_controller.route('/<string:patron_id>')
+@patrons_controller.route('/<string:patronId>')
 class PatronItem(patrons_controller.Resource):
     @patrons_controller.doc("Get patron by ID")
     @patrons_controller.marshal_with(Patron, code=200)
-    def get(self, patron_id):
+    def get(self, patronId):
         """Get a specific patron by ID"""
-        object_id = str_to_objectid(patron_id)
+        object_id = str_to_objectid(patronId)
         if not object_id:
             abort(404, "Invalid patron ID")
         
@@ -55,9 +55,9 @@ class PatronItem(patrons_controller.Resource):
     @patrons_controller.doc("Update patron by ID")
     @patrons_controller.expect(PatronUpdate)
     @patrons_controller.marshal_with(Patron, code=200)
-    def patch(self, patron_id):
+    def patch(self, patronId):
         """Update a patron"""
-        object_id = str_to_objectid(patron_id)
+        object_id = str_to_objectid(patronId)
         if not object_id:
             abort(404, "Invalid patron ID")
         
@@ -82,9 +82,9 @@ class PatronItem(patrons_controller.Resource):
         return serialize_mongo_doc(result)
     
     @patrons_controller.doc("Delete patron by ID")
-    def delete(self, patron_id):
+    def delete(self, patronId):
         """Delete a patron"""
-        object_id = str_to_objectid(patron_id)
+        object_id = str_to_objectid(patronId)
         if not object_id:
             abort(404, "Invalid patron ID")
         

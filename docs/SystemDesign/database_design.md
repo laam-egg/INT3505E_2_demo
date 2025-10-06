@@ -80,7 +80,7 @@ type Title = {
     name: string,
     edition: number,
     authors: string, /*newline-separated list*/
-    year_of_publication: number,
+    yearOfPublication: number,
     tags: string, /*newline-separated list*/
 };
 ```
@@ -89,7 +89,7 @@ type Title = {
 
 ```typescript
 type Copy = {
-    title_id: string, /*ref*/
+    titleId: string, /*ref*/
     code: string,
 };
 ```
@@ -98,8 +98,8 @@ type Copy = {
 
 ```typescript
 type Borrow = {
-    patron_id: string, /*ref*/
-    copy_id: string, /*ref*/
+    patronId: string, /*ref*/
+    copyId: string, /*ref*/
     status: string, /*"BORROWING", "RETURNED", or "LOST"*/
     createdAt: Date,
     statusLastUpdatedAt: Date,

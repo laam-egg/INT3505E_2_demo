@@ -45,10 +45,10 @@ def serialize_mongo_doc(doc):
     
     return doc
 
-def get_copy_status(copy_id):
+def get_copy_status(copyId):
     """Determine copy status based on latest borrow"""
     # Find all borrows for this copy
-    copy_borrows = list(borrows_collection.find({"copy_id": copy_id}))
+    copy_borrows = list(borrows_collection.find({"copyId": copyId}))
     
     if not copy_borrows:
         return "AVAILABLE"
@@ -76,10 +76,10 @@ def get_title_with_stats(title_doc):
     if title_doc is None:
         return None
     
-    title_id = str(title_doc['_id'])
+    titleId = str(title_doc['_id'])
     
     # Get all copies for this title
-    copies = list(copies_collection.find({"title_id": title_id}))
+    copies = list(copies_collection.find({"titleId": titleId}))
     
     total_copies = len(copies)
     available_count = 0
@@ -87,8 +87,8 @@ def get_title_with_stats(title_doc):
     lost_count = 0
     
     for copy in copies:
-        copy_id = str(copy['_id'])
-        status = get_copy_status(copy_id)
+        copyId = str(copy['_id'])
+        status = get_copy_status(copyId)
         
         if status == "AVAILABLE":
             available_count += 1

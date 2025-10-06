@@ -45,13 +45,13 @@ class TitleList(titles_controller.Resource):
         
         return get_title_with_stats(title_doc), 201
 
-@titles_controller.route('/<string:title_id>')
+@titles_controller.route('/<string:titleId>')
 class TitleItem(titles_controller.Resource):
     @titles_controller.doc("Get title by ID")
     @titles_controller.marshal_with(Title, code=200)
-    def get(self, title_id):
+    def get(self, titleId):
         """Get a specific title by ID"""
-        object_id = str_to_objectid(title_id)
+        object_id = str_to_objectid(titleId)
         if not object_id:
             abort(404, "Invalid title ID")
         
@@ -64,9 +64,9 @@ class TitleItem(titles_controller.Resource):
     @titles_controller.doc("Update title by ID")
     @titles_controller.expect(TitleUpdate)
     @titles_controller.marshal_with(Title, code=200)
-    def patch(self, title_id):
+    def patch(self, titleId):
         """Update a title"""
-        object_id = str_to_objectid(title_id)
+        object_id = str_to_objectid(titleId)
         if not object_id:
             abort(404, "Invalid title ID")
         
@@ -92,14 +92,14 @@ class TitleItem(titles_controller.Resource):
         return get_title_with_stats(result)
     
     @titles_controller.doc("Delete title by ID")
-    def delete(self, title_id):
+    def delete(self, titleId):
         """Delete a title and all its copies"""
-        object_id = str_to_objectid(title_id)
+        object_id = str_to_objectid(titleId)
         if not object_id:
             abort(404, "Invalid title ID")
         
         # Delete all copies of this title first
-        copies_collection.delete_many({"title_id": title_id})
+        copies_collection.delete_many({"titleId": titleId})
         
         # Delete the title
         result = titles_collection.delete_one({"_id": object_id})
@@ -109,13 +109,13 @@ class TitleItem(titles_controller.Resource):
         
         return "", 204
 
-@titles_controller.route('/<string:title_id>/copies')
+@titles_controller.route('/<string:titleId>/copies')
 class CopyList(titles_controller.Resource):
     @titles_controller.doc("Get all copies of a title")
     @titles_controller.marshal_list_with(Copy, code=200)
-    def get(self, title_id):
+    def get(self, titleId):
         """Get all copies of a specific title"""
-        object_id = str_to_objectid(title_id)
+        object_id = str_to_objectid(titleId)
         if not object_id:
             abort(404, "Invalid title ID")
         
@@ -125,7 +125,7 @@ class CopyList(titles_controller.Resource):
             abort(404, "Title not found")
         
         # Get all copies for this title
-        copies = list(copies_collection.find({"title_id": title_id}))
+        copies = list(copies_collection.find({"titleId": titleId}))
         
         title_copies = []
         for copy in copies:
@@ -138,9 +138,9 @@ class CopyList(titles_controller.Resource):
     @titles_controller.doc("Create a new copy of a title")
     @titles_controller.expect(CopyCreate)
     @titles_controller.marshal_with(Copy, code=201)
-    def post(self, title_id):
+    def post(self, titleId):
         """Create a new copy of a title"""
-        object_id = str_to_objectid(title_id)
+        object_id = str_to_objectid(titleId)
         if not object_id:
             abort(404, "Invalid title ID")
         
@@ -152,7 +152,7 @@ class CopyList(titles_controller.Resource):
         data = request.get_json()
         
         copy_doc = {
-            "title_id": title_id,
+            "titleId": titleId,
             "code": data["code"]
         }
         
@@ -160,48 +160,48 @@ class CopyList(titles_controller.Resource):
         copy_doc["_id"] = result.inserted_id
         
         copy_response = serialize_mongo_doc(copy_doc)
-        copy_response["titleId"] = title_id
+        copy_response["titleId"] = titleId
         copy_response["status"] = "AVAILABLE"
         
         return copy_response, 201
 
-@titles_controller.route('/<string:title_id>/copies/<string:copy_id>')
+@titles_controller.route('/<string:titleId>/copies/<string:copyId>')
 class CopyItem(titles_controller.Resource):
     @titles_controller.doc("Get copy by ID")
     @titles_controller.marshal_with(Copy, code=200)
-    def get(self, title_id, copy_id):
+    def get(self, titleId, copyId):
         """Get a specific copy by ID"""
         # Validate title exists
-        title_object_id = str_to_objectid(title_id)
+        title_object_id = str_to_objectid(titleId)
         if not title_object_id or not titles_collection.find_one({"_id": title_object_id}):
             abort(404, "Title not found")
         
         # Validate copy exists and belongs to title
-        copy_object_id = str_to_objectid(copy_id)
+        copy_object_id = str_to_objectid(copyId)
         if not copy_object_id:
             abort(404, "Invalid copy ID")
         
-        copy = copies_collection.find_one({"_id": copy_object_id, "title_id": title_id})
+        copy = copies_collection.find_one({"_id": copy_object_id, "titleId": titleId})
         if not copy:
             abort(404, "Copy not found or does not belong to this title")
         
         copy_response = serialize_mongo_doc(copy)
-        copy_response["titleId"] = title_id
-        copy_response["status"] = get_copy_status(copy_id)
+        copy_response["titleId"] = titleId
+        copy_response["status"] = get_copy_status(copyId)
         return copy_response
     
     @titles_controller.doc("Update copy by ID")
     @titles_controller.expect(CopyUpdate)
     @titles_controller.marshal_with(Copy, code=200)
-    def patch(self, title_id, copy_id):
+    def patch(self, titleId, copyId):
         """Update a copy"""
         # Validate title exists
-        title_object_id = str_to_objectid(title_id)
+        title_object_id = str_to_objectid(titleId)
         if not title_object_id or not titles_collection.find_one({"_id": title_object_id}):
             abort(404, "Title not found")
         
         # Validate copy exists and belongs to title
-        copy_object_id = str_to_objectid(copy_id)
+        copy_object_id = str_to_objectid(copyId)
         if not copy_object_id:
             abort(404, "Invalid copy ID")
         
@@ -215,7 +215,7 @@ class CopyItem(titles_controller.Resource):
             abort(400, "No valid fields to update")
         
         result = copies_collection.find_one_and_update(
-            {"_id": copy_object_id, "title_id": title_id},
+            {"_id": copy_object_id, "titleId": titleId},
             {"$set": update_doc},
             return_document=True
         )
@@ -224,24 +224,24 @@ class CopyItem(titles_controller.Resource):
             abort(404, "Copy not found or does not belong to this title")
         
         copy_response = serialize_mongo_doc(result)
-        copy_response["titleId"] = title_id
-        copy_response["status"] = get_copy_status(copy_id)
+        copy_response["titleId"] = titleId
+        copy_response["status"] = get_copy_status(copyId)
         return copy_response
     
     @titles_controller.doc("Delete copy by ID")
-    def delete(self, title_id, copy_id):
+    def delete(self, titleId, copyId):
         """Delete a copy"""
         # Validate title exists
-        title_object_id = str_to_objectid(title_id)
+        title_object_id = str_to_objectid(titleId)
         if not title_object_id or not titles_collection.find_one({"_id": title_object_id}):
             abort(404, "Title not found")
         
         # Delete copy
-        copy_object_id = str_to_objectid(copy_id)
+        copy_object_id = str_to_objectid(copyId)
         if not copy_object_id:
             abort(404, "Invalid copy ID")
         
-        result = copies_collection.delete_one({"_id": copy_object_id, "title_id": title_id})
+        result = copies_collection.delete_one({"_id": copy_object_id, "titleId": titleId})
         
         if result.deleted_count == 0:
             abort(404, "Copy not found or does not belong to this title")
