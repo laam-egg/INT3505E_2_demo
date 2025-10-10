@@ -4,33 +4,25 @@
 /* eslint-disable */
 export type Title = {
     /**
-     * Newline-separated list of authors
+     * The title ID
      */
-    authors: string;
+    readonly id?: string;
     /**
-     * Number of available copies
+     * Title name
      */
-    readonly availableCopies?: number;
-    /**
-     * Number of borrowed copies
-     */
-    readonly borrowedCopies?: number;
+    name: string;
     /**
      * Edition number
      */
     edition: number;
     /**
-     * The title ID
+     * Newline-separated list of authors
      */
-    readonly id?: string;
+    authors: string;
     /**
-     * Number of lost copies
+     * Year of publication
      */
-    readonly lostCopies?: number;
-    /**
-     * Title name
-     */
-    name: string;
+    yearOfPublication: number;
     /**
      * Newline-separated list of tags
      */
@@ -40,8 +32,16 @@ export type Title = {
      */
     readonly totalCopies?: number;
     /**
-     * Year of publication
+     * Number of available copies
      */
-    yearOfPublication: number;
+    readonly availableCopies?: number;
+    /**
+     * Number of borrowed copies
+     */
+    readonly borrowedCopies?: number;
+    /**
+     * Number of lost copies
+     */
+    readonly lostCopies?: number;
 };
 

@@ -4,24 +4,24 @@
 /* eslint-disable */
 export type TitleUpdate = {
     /**
-     * Newline-separated list of authors
+     * Title name
      */
-    authors?: string;
+    name?: string;
     /**
      * Edition number
      */
     edition?: number;
     /**
-     * Title name
+     * Newline-separated list of authors
      */
-    name?: string;
-    /**
-     * Newline-separated list of tags
-     */
-    tags?: string;
+    authors?: string;
     /**
      * Year of publication
      */
     yearOfPublication?: number;
+    /**
+     * Newline-separated list of tags
+     */
+    tags?: string;
 };
 

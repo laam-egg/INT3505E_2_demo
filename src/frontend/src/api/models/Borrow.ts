@@ -4,14 +4,6 @@
 /* eslint-disable */
 export type Borrow = {
     /**
-     * The copy ID
-     */
-    copyId: string;
-    /**
-     * Borrow creation timestamp
-     */
-    readonly createdAt?: string;
-    /**
      * The borrow ID
      */
     readonly id?: string;
@@ -20,9 +12,17 @@ export type Borrow = {
      */
     patronId: string;
     /**
+     * The copy ID
+     */
+    copyId: string;
+    /**
      * Borrow status: BORROWING, RETURNED, or LOST
      */
     status: string;
+    /**
+     * Borrow creation timestamp
+     */
+    readonly createdAt?: string;
     /**
      * Last status update timestamp
      */

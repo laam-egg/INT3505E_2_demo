@@ -13,27 +13,6 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class TitlesService {
     /**
-     * Get all titles with pagination
-     * @returns Title Success
-     * @throws ApiError
-     */
-    public static getAllTitles({
-        xFields,
-    }: {
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Array<Title>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/titles/',
-            headers: {
-                'X-Fields': xFields,
-            },
-        });
-    }
-    /**
      * Create a new title
      * @returns Title Success
      * @throws ApiError
@@ -50,7 +29,7 @@ export class TitlesService {
     }): CancelablePromise<Title> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/titles/',
+            url: '/titles/',
             headers: {
                 'X-Fields': xFields,
             },
@@ -58,44 +37,21 @@ export class TitlesService {
         });
     }
     /**
-     * Delete a title and all its copies
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deleteTitleById({
-        titleId,
-    }: {
-        titleId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/api/v1/titles/{titleId}',
-            path: {
-                'titleId': titleId,
-            },
-        });
-    }
-    /**
-     * Get a specific title by ID
+     * Get all titles with pagination
      * @returns Title Success
      * @throws ApiError
      */
-    public static getTitleById({
-        titleId,
+    public static getAllTitles({
         xFields,
     }: {
-        titleId: string,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Title> {
+    }): CancelablePromise<Array<Title>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/titles/{titleId}',
-            path: {
-                'titleId': titleId,
-            },
+            url: '/titles/',
             headers: {
                 'X-Fields': xFields,
             },
@@ -120,7 +76,7 @@ export class TitlesService {
     }): CancelablePromise<Title> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/titles/{titleId}',
+            url: '/titles/{titleId}',
             path: {
                 'titleId': titleId,
             },
@@ -131,11 +87,29 @@ export class TitlesService {
         });
     }
     /**
-     * Get all copies of a specific title
-     * @returns Copy Success
+     * Delete a title and all its copies
+     * @returns any Success
      * @throws ApiError
      */
-    public static getAllCopiesOfATitle({
+    public static deleteTitleById({
+        titleId,
+    }: {
+        titleId: string,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/titles/{titleId}',
+            path: {
+                'titleId': titleId,
+            },
+        });
+    }
+    /**
+     * Get a specific title by ID
+     * @returns Title Success
+     * @throws ApiError
+     */
+    public static getTitleById({
         titleId,
         xFields,
     }: {
@@ -144,10 +118,10 @@ export class TitlesService {
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Array<Copy>> {
+    }): CancelablePromise<Title> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/titles/{titleId}/copies',
+            url: '/titles/{titleId}',
             path: {
                 'titleId': titleId,
             },
@@ -175,7 +149,7 @@ export class TitlesService {
     }): CancelablePromise<Copy> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/titles/{titleId}/copies',
+            url: '/titles/{titleId}/copies',
             path: {
                 'titleId': titleId,
             },
@@ -186,49 +160,25 @@ export class TitlesService {
         });
     }
     /**
-     * Delete a copy
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deleteCopyById({
-        titleId,
-        copyId,
-    }: {
-        titleId: string,
-        copyId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/api/v1/titles/{titleId}/copies/{copyId}',
-            path: {
-                'titleId': titleId,
-                'copyId': copyId,
-            },
-        });
-    }
-    /**
-     * Get a specific copy by ID
+     * Get all copies of a specific title
      * @returns Copy Success
      * @throws ApiError
      */
-    public static getCopyById({
+    public static getAllCopiesOfATitle({
         titleId,
-        copyId,
         xFields,
     }: {
         titleId: string,
-        copyId: string,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Copy> {
+    }): CancelablePromise<Array<Copy>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/titles/{titleId}/copies/{copyId}',
+            url: '/titles/{titleId}/copies',
             path: {
                 'titleId': titleId,
-                'copyId': copyId,
             },
             headers: {
                 'X-Fields': xFields,
@@ -256,7 +206,7 @@ export class TitlesService {
     }): CancelablePromise<Copy> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/titles/{titleId}/copies/{copyId}',
+            url: '/titles/{titleId}/copies/{copyId}',
             path: {
                 'titleId': titleId,
                 'copyId': copyId,
@@ -265,6 +215,56 @@ export class TitlesService {
                 'X-Fields': xFields,
             },
             body: payload,
+        });
+    }
+    /**
+     * Delete a copy
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static deleteCopyById({
+        titleId,
+        copyId,
+    }: {
+        titleId: string,
+        copyId: string,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/titles/{titleId}/copies/{copyId}',
+            path: {
+                'titleId': titleId,
+                'copyId': copyId,
+            },
+        });
+    }
+    /**
+     * Get a specific copy by ID
+     * @returns Copy Success
+     * @throws ApiError
+     */
+    public static getCopyById({
+        titleId,
+        copyId,
+        xFields,
+    }: {
+        titleId: string,
+        copyId: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Copy> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/titles/{titleId}/copies/{copyId}',
+            path: {
+                'titleId': titleId,
+                'copyId': copyId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
         });
     }
 }

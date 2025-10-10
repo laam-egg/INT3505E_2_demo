@@ -10,6 +10,30 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class BorrowsService {
     /**
+     * Create a new borrow
+     * @returns Borrow Success
+     * @throws ApiError
+     */
+    public static createANewBorrow({
+        payload,
+        xFields,
+    }: {
+        payload: BorrowCreate,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Borrow> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/borrows/',
+            headers: {
+                'X-Fields': xFields,
+            },
+            body: payload,
+        });
+    }
+    /**
      * Get all borrows with optional patron filtering
      * @returns Borrow Success
      * @throws ApiError
@@ -29,80 +53,12 @@ export class BorrowsService {
     }): CancelablePromise<Array<Borrow>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/borrows/',
+            url: '/borrows/',
             headers: {
                 'X-Fields': xFields,
             },
             query: {
                 'patronId': patronId,
-            },
-        });
-    }
-    /**
-     * Create a new borrow
-     * @returns Borrow Success
-     * @throws ApiError
-     */
-    public static createANewBorrow({
-        payload,
-        xFields,
-    }: {
-        payload: BorrowCreate,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Borrow> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/v1/borrows/',
-            headers: {
-                'X-Fields': xFields,
-            },
-            body: payload,
-        });
-    }
-    /**
-     * Delete a borrow
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deleteBorrowById({
-        borrowId,
-    }: {
-        borrowId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/api/v1/borrows/{borrowId}',
-            path: {
-                'borrowId': borrowId,
-            },
-        });
-    }
-    /**
-     * Get a specific borrow by ID
-     * @returns Borrow Success
-     * @throws ApiError
-     */
-    public static getBorrowById({
-        borrowId,
-        xFields,
-    }: {
-        borrowId: string,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Borrow> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/borrows/{borrowId}',
-            path: {
-                'borrowId': borrowId,
-            },
-            headers: {
-                'X-Fields': xFields,
             },
         });
     }
@@ -125,7 +81,7 @@ export class BorrowsService {
     }): CancelablePromise<Borrow> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/borrows/{borrowId}',
+            url: '/borrows/{borrowId}',
             path: {
                 'borrowId': borrowId,
             },
@@ -133,6 +89,50 @@ export class BorrowsService {
                 'X-Fields': xFields,
             },
             body: payload,
+        });
+    }
+    /**
+     * Delete a borrow
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static deleteBorrowById({
+        borrowId,
+    }: {
+        borrowId: string,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/borrows/{borrowId}',
+            path: {
+                'borrowId': borrowId,
+            },
+        });
+    }
+    /**
+     * Get a specific borrow by ID
+     * @returns Borrow Success
+     * @throws ApiError
+     */
+    public static getBorrowById({
+        borrowId,
+        xFields,
+    }: {
+        borrowId: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Borrow> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/borrows/{borrowId}',
+            path: {
+                'borrowId': borrowId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
         });
     }
 }

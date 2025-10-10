@@ -4,12 +4,12 @@
 /* eslint-disable */
 export type BorrowCreate = {
     /**
-     * The copy ID
-     */
-    copyId: string;
-    /**
      * The patron ID
      */
     patronId: string;
+    /**
+     * The copy ID
+     */
+    copyId: string;
 };
 

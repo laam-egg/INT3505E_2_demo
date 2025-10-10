@@ -27,6 +27,14 @@ def home_page():
                     <li><a href="/api/v1/swagger.json">OpenAPI Specification Document (OAS) in JSON</a></li>
                 </ul>
             </div>
+
+            <div>
+                <h2>API v2</h2>
+                <ul>
+                    <li><a href="/api/v2/docs">API Documentation and Playground (Swagger UI)</a></li>
+                    <li><a href="/api/v2/swagger.json">OpenAPI Specification Document (OAS) in JSON</a></li>
+                </ul>
+            </div>
         </div>
     </body>
     """

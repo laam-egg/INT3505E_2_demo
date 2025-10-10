@@ -10,27 +10,6 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class PatronsService {
     /**
-     * Get all patrons with pagination
-     * @returns Patron Success
-     * @throws ApiError
-     */
-    public static getAllPatrons({
-        xFields,
-    }: {
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Array<Patron>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/patrons/',
-            headers: {
-                'X-Fields': xFields,
-            },
-        });
-    }
-    /**
      * Create a new patron
      * @returns Patron Success
      * @throws ApiError
@@ -47,7 +26,7 @@ export class PatronsService {
     }): CancelablePromise<Patron> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/patrons/',
+            url: '/patrons/',
             headers: {
                 'X-Fields': xFields,
             },
@@ -55,44 +34,21 @@ export class PatronsService {
         });
     }
     /**
-     * Delete a patron
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deletePatronById({
-        patronId,
-    }: {
-        patronId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/api/v1/patrons/{patronId}',
-            path: {
-                'patronId': patronId,
-            },
-        });
-    }
-    /**
-     * Get a specific patron by ID
+     * Get all patrons with pagination
      * @returns Patron Success
      * @throws ApiError
      */
-    public static getPatronById({
-        patronId,
+    public static getAllPatrons({
         xFields,
     }: {
-        patronId: string,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Patron> {
+    }): CancelablePromise<Array<Patron>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/patrons/{patronId}',
-            path: {
-                'patronId': patronId,
-            },
+            url: '/patrons/',
             headers: {
                 'X-Fields': xFields,
             },
@@ -117,7 +73,7 @@ export class PatronsService {
     }): CancelablePromise<Patron> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/v1/patrons/{patronId}',
+            url: '/patrons/{patronId}',
             path: {
                 'patronId': patronId,
             },
@@ -125,6 +81,50 @@ export class PatronsService {
                 'X-Fields': xFields,
             },
             body: payload,
+        });
+    }
+    /**
+     * Delete a patron
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static deletePatronById({
+        patronId,
+    }: {
+        patronId: string,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/patrons/{patronId}',
+            path: {
+                'patronId': patronId,
+            },
+        });
+    }
+    /**
+     * Get a specific patron by ID
+     * @returns Patron Success
+     * @throws ApiError
+     */
+    public static getPatronById({
+        patronId,
+        xFields,
+    }: {
+        patronId: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Patron> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/patrons/{patronId}',
+            path: {
+                'patronId': patronId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
         });
     }
 }
