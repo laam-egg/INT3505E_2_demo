@@ -1,9 +1,9 @@
-from ..common import Controller
+from ...common import Controller
 from .dto.patron import patron_dto, patron_create_dto, patron_update_dto
 from flask import request, jsonify
 from flask_restx import abort
 from datetime import datetime
-from ..db import patrons_collection, serialize_mongo_doc, str_to_objectid
+from ...db import patrons_collection, serialize_mongo_doc, str_to_objectid
 
 patrons_controller = Controller("patrons", __name__)
 

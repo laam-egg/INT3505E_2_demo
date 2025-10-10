@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "api:sync": "openapi --input http://localhost:5000/api/v1/json --output ./src/api --useOptions --client axios"
+    "api:sync": "openapi --input http://localhost:5000/api/v1/swagger.json --output ./src/api --useOptions --client axios"
   },
   "dependencies": {
     "antd": "^5.27.4",

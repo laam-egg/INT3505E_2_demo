@@ -1,9 +1,9 @@
-from ..common import Controller
+from ...common import Controller
 from .dto.borrow import borrow_dto, borrow_create_dto, borrow_update_dto
 from flask import request, jsonify
 from flask_restx import abort
 from datetime import datetime
-from ..db import (patrons_collection, copies_collection, borrows_collection, 
+from ...db import (patrons_collection, copies_collection, borrows_collection, 
                   serialize_mongo_doc, str_to_objectid, get_copy_status)
 
 borrows_controller = Controller("borrows", __name__)

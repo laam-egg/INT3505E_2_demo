@@ -8,7 +8,7 @@ class Controller:
         # type: (Controller, str, str, str | None, str) -> None
         self.Resource = Resource
 
-        real_url_prefix = url_prefix or "/" + name
+        real_url_prefix = url_prefix if url_prefix is not None else ("/" + name)
         self._c_url_prefix = real_url_prefix
         self._c_bp_name = name
         self._c_bp_module_name = module_name

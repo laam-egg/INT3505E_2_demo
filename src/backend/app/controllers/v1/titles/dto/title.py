@@ -1,4 +1,4 @@
-from ...common import Controller, fields
+from ....common import Controller, fields
 
 def title_dto(controller):
     # type: (Controller) -> any

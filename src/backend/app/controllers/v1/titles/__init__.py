@@ -1,10 +1,10 @@
-from ..common import Controller
+from ...common import Controller
 from .dto.title import title_dto, title_create_dto, title_update_dto
 from .dto.copy import copy_dto, copy_create_dto, copy_update_dto
 from flask import request, jsonify
 from flask_restx import abort
 from datetime import datetime
-from ..db import (titles_collection, copies_collection, borrows_collection, 
+from ...db import (titles_collection, copies_collection, borrows_collection, 
                   serialize_mongo_doc, str_to_objectid, get_copy_status, get_title_with_stats)
 
 titles_controller = Controller("titles", __name__)

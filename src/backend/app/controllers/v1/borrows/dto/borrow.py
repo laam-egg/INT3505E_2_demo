@@ -1,4 +1,4 @@
-from ...common import Controller, fields
+from ....common import Controller, fields
 
 def borrow_dto(controller):
     # type: (Controller) -> any
