@@ -19,7 +19,11 @@ patron_create_dto = api.model("PatronCreate", {
     "name": fields.String(required=True, description="Patron name", example="Vũ Tùng Lâm"),
 })
 
-patron_replace_dto = api.clone("PatronReplace", patron_create_dto, {});
+patron_update_dto = api.model("PatronUpdate", {
+    "name": fields.String(required=False, description="Patron name", example="Vũ Tùng Lâm"),
+})
+
+patron_replace_dto = api.clone("PatronReplace", patron_create_dto, {})
 
 patron_dto = api.clone("Patron", patron_create_dto, {
     "id": fields.String(readonly=True, description="The patron ID"),
@@ -103,6 +107,20 @@ class Item(Resource):
         data = request.get_json()
         return self.service.put_item_by_id(patronId, data)
     
+
+
+    @api.doc("Sửa một phần patron, theo ID")
+    @api.expect(patron_update_dto)
+    @h.returns(
+        patron_dto,
+        self_links=lambda content: [url_for("v1.patrons_item", patronId=content["id"])],
+        collection_links=lambda content: [url_for("v1.patrons_collection")],
+    )
+    def patch(self, patronId):
+        data = request.get_json()
+        return self.service.patch_item_by_id(patronId, data)
+
+
 
 
 

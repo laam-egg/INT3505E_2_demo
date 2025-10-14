@@ -41,8 +41,9 @@ class BaseCRUDService:
         if not object_id:
             abort(404, "Invalid ID") # type: ignore
         result = self.collection.find_one({ "_id": object_id })
-        if not result:
+        if not result or result is None:
             abort(404, "Item not found") # type: ignore
+            raise RuntimeError
         return result
     
     def put_item_by_id(self, id, item_doc):

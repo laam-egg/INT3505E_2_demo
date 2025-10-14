@@ -15,6 +15,15 @@ class Pageable:
     def get_limit(self):
         return self.size
     
+    def get_kwargs(self):
+        return {
+            "skip": self.get_skip(),
+            "limit": self.get_limit(),
+        }
+    
+    def increment(self):
+        self.page += 1
+    
     @staticmethod
     def pageable_query_params(parser=None):
         if not parser:

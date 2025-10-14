@@ -11,5 +11,11 @@ _api = Api(
 )
 
 from .patrons import patrons_api
+from .titles import titles_api
+from .copies import copies_api
+from .borrows import borrows_api
 
 _api.add_namespace(patrons_api)
+_api.add_namespace(titles_api)
+_api.add_namespace(copies_api)
+_api.add_namespace(borrows_api)
