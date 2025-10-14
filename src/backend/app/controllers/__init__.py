@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, url_for
 from .v0a import v0a
 from .v0b import v0b
+from .v1 import v1
 
 class ApiVersion:
     def __init__(self, name, blueprint):
@@ -11,7 +12,23 @@ class ApiVersion:
 API_VERSIONS = [
     ApiVersion("v0a", v0a),
     ApiVersion("v0b", v0b),
+    ApiVersion("v1", v1),
 ] # type: list[ApiVersion]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def register_api_controllers(app):
     # type: (Flask) -> None

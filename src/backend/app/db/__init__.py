@@ -19,6 +19,11 @@ db = client.get_default_database()
 test_books_collection_ = db.books
 test_authors_collection_ = db.authors
 
+patrons_collection = db.patrons
+titles_collection = db.titles
+copies_collection = db.copies
+borrows_collection = db.borrows
+
 def serialize_mongo_doc(doc):
     """Convert MongoDB document to JSON serializable format"""
     if doc is None:
