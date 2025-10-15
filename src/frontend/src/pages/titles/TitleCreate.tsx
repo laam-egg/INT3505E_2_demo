@@ -23,7 +23,7 @@ export default function TitleCreatePage() {
         tags: values.tags?.split('\n').filter((t: string) => t.trim()).join('\n') || ''
       };
 
-      await TitlesService.createANewTitle({ payload });
+      await TitlesService.postCollection({ payload });
       message.success('Thêm đầu sách thành công');
       navigate('/titles');
     } catch (error) {

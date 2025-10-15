@@ -9,25 +9,29 @@ export default function BorrowListPage() {
   const [borrows, setBorrows] = useState<Borrow[]>([]);
   const [patrons, setPatrons] = useState<Patron[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPatronIds, setSelectedPatronIds] = useState<string[]>([]);
+  const [selectedPatronId, setSelectedPatronId] = useState<string | null>(null);
+  const [_selectedCopyId, setSelectedCopyId] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     fetchPatrons();
     
     // Get patronId from URL params
-    const patronId = searchParams.get('patronId');
-    if (patronId) {
-      setSelectedPatronIds([patronId]);
-    }
+    const patronId = searchParams.get('patronId') || null;
+    setSelectedPatronId(patronId);
+
+    // TODO: A dropdown to select copy as well.
+    // Get copyId from URL params
+    const copyId = searchParams.get('copyId') || null;
+    setSelectedCopyId(copyId);
     
     fetchBorrows();
   }, [searchParams]);
 
   const fetchPatrons = async () => {
     try {
-      const data = await PatronsService.getAllPatrons({});
-      setPatrons(data || []);
+      const data = await PatronsService.getCollection({});
+      setPatrons(data.content || []);
     } catch (error) {
       console.error('Failed to fetch patrons');
     }
@@ -36,17 +40,19 @@ export default function BorrowListPage() {
   const fetchBorrows = async () => {
     try {
       setLoading(true);
-      const patronId = searchParams.get('patronId');
+      const patronId = searchParams.get('patronId') || undefined;
+      const copyId = searchParams.get('copyId') || undefined;
       
-      // For now, manually construct URL with query parameter since API client doesn't support it yet
-      let url = '/api/v1/borrows/';
-      if (patronId) {
-        url += `?patronId=${patronId}`;
-      }
-      
-      const response = await fetch(`http://localhost:5000${url}`);
-      const data = await response.json();
-      setBorrows(data || []);
+      const data = await BorrowsService.getCollection({
+        patronId, copyId,
+
+        ...(copyId ? {
+          pageNumber: 0,
+          pageSize: 1,
+        } : {}),
+      });
+
+      setBorrows(data.content || []);
     } catch (error) {
       message.error('Không thể tải danh sách mượn sách');
     } finally {
@@ -54,11 +60,12 @@ export default function BorrowListPage() {
     }
   };
 
-  const handlePatronChange = (patronIds: string[]) => {
-    setSelectedPatronIds(patronIds);
+  const handlePatronChange = (patronId: string | null | undefined) => {
+    patronId = patronId || null;
+    setSelectedPatronId(patronId);
     const newParams = new URLSearchParams(searchParams);
-    if (patronIds.length > 0) {
-      newParams.set('patronId', patronIds.join(','));
+    if (patronId) {
+      newParams.set('patronId', patronId);
     } else {
       newParams.delete('patronId');
     }
@@ -67,7 +74,7 @@ export default function BorrowListPage() {
 
   const handleStatusUpdate = async (borrowId: string, newStatus: string) => {
     try {
-      await BorrowsService.updateBorrowStatusById({ 
+      await BorrowsService.patchItem({ 
         borrowId, 
         payload: { status: newStatus as any }
       });
@@ -186,11 +193,11 @@ export default function BorrowListPage() {
       <div style={{ marginBottom: 16 }}>
         <label>Lọc theo người dùng: </label>
         <Select
-          mode="multiple"
           style={{ width: 300 }}
           placeholder="Chọn người dùng"
-          value={selectedPatronIds}
+          value={selectedPatronId}
           onChange={handlePatronChange}
+          allowClear
         >
           {patrons.map(patron => (
             <Option key={patron.id} value={patron.id!}>{patron.name}</Option>

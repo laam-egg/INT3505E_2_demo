@@ -30,7 +30,7 @@ class HATEOAS:
 
         api = self.api
         hateoas_model = api.model(
-            name = model.name + "_HATEOAS",
+            name = model.name + ("" if not as_list else "List") + "_HATEOAS",
             model = {
                 "content": fields.Nested(model) if not as_list else fields.List(fields.Nested(model)),
                 "_links": fields.Nested(

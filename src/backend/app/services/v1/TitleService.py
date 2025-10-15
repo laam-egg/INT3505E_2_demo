@@ -49,7 +49,7 @@ class TitleService(BaseCRUDService):
         if isinstance(doc, list):
             return [*map(self.add_stats, doc)]
         
-        docId = str(doc.get('id', doc.get('_id', None)))
+        docId = str(doc.get('id', doc.get('_id', "")))
         if not docId:
             raise RuntimeError("no id in doc", doc)
         
@@ -81,6 +81,8 @@ class TitleService(BaseCRUDService):
                     borrowed_count += 1
                 elif status == "LOST":
                     lost_count += 1
+
+            pageable.increment()
         
         return {
             "totalCopies": total_copies,

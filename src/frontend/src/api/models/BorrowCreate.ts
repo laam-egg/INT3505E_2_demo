@@ -4,11 +4,11 @@
 /* eslint-disable */
 export type BorrowCreate = {
     /**
-     * The patron ID
+     * ID người mượn (patron)
      */
     patronId: string;
     /**
-     * The copy ID
+     * ID bản sao của một sách nào đó được mượn
      */
     copyId: string;
 };

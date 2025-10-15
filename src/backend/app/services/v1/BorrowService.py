@@ -1,25 +1,36 @@
-from ...db import copies_collection
+from ...db import borrows_collection
 from pymongo.collection import Collection
 from .BaseCRUDService import BaseCRUDService
 from ...utils.pageable import Pageable
 from pymongo import ASCENDING, DESCENDING
-from typing import override
+from typing import Any, override
 from datetime import datetime
 
 class BorrowService(BaseCRUDService):
     def __init__(self, collection=None):
         # type: (BorrowService, Collection|None) -> None
-        collection = collection or copies_collection
+        collection = collection or borrows_collection
         super().__init__(collection)
     
-    def get_collection_by_copyId_orderBy_statusLastUpdatedAt_DESC(self, copyId: str, pageable: Pageable):
+    def get_collection_by_patronId_and_copyId_orderBy_statusLastUpdatedAt_DESC(
+        self, patronId: str | None, copyId: str | None, pageable: Pageable
+    ):
         """
-        Tìm và trả về danh sách các lượt mượn theo copyId,
+        Tìm và trả về danh sách các lượt mượn theo patronId và copyId,
         có pagination. Gần nhất trước.
+
+        Nếu một trường (patronId hoặc copyId) là None
+        thì không lookup theo trường đó.
         """
+        q = {}
+        if patronId:
+            q['patronId'] = patronId
+        if copyId:
+            q['copyId'] = copyId
+        
         return [
             *self.collection.find(
-                { "copyId": copyId },
+                q,
                 sort=[('statusLastUpdatedAt', DESCENDING)],
                 **pageable.get_kwargs()
             )

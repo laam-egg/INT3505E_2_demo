@@ -4,12 +4,12 @@
 /* eslint-disable */
 export type Patron = {
     /**
-     * The patron ID
-     */
-    readonly id?: string;
-    /**
      * Patron name
      */
     name: string;
+    /**
+     * The patron ID
+     */
+    readonly id?: string;
 };
 

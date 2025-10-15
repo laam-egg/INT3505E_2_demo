@@ -2,26 +2,26 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type TitleUpdate = {
+export type TitleReplace = {
     /**
      * Tên đầu sách
      */
-    name?: string;
+    name: string;
     /**
      * Số thứ tự của lần tái bản
      */
-    edition?: number;
+    edition: number;
     /**
      * Tên các tác giả, phân cách bằng newlines
      */
-    authors?: string;
+    authors: string;
     /**
      * Năm xuất bản
      */
-    yearOfPublication?: number;
+    yearOfPublication: number;
     /**
      * Các thẻ/tags, phân cách bằng newlines
      */
-    tags?: string;
+    tags: string;
 };
 

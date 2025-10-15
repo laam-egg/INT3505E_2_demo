@@ -4,7 +4,7 @@ import { useNavigate, useParams, Link } from 'react-router';
 import { BorrowsService, type Borrow } from '../../api';
 
 export default function BorrowUpdatePage() {
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const [borrow, setBorrow] = useState<Borrow | null>(null);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -18,8 +18,8 @@ export default function BorrowUpdatePage() {
   const fetchBorrow = async (borrowId: string) => {
     try {
       setLoading(true);
-      const data = await BorrowsService.getBorrowById({ borrowId });
-      setBorrow(data);
+      const data = await BorrowsService.getItem({ borrowId });
+      setBorrow(data.content || null);
     } catch (error) {
       message.error('Không thể tải thông tin lượt mượn');
       navigate('/borrows');
@@ -33,9 +33,9 @@ export default function BorrowUpdatePage() {
     
     try {
       setLoading(true);
-      await BorrowsService.updateBorrowStatusById({ 
+      await BorrowsService.patchItem({ 
         borrowId: id, 
-        payload: { status: newStatus as any }
+        payload: { status: newStatus }
       });
       message.success('Cập nhật trạng thái thành công');
       navigate('/borrows');

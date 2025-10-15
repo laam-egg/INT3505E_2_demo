@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Space, message, Popconfirm, Tag } from 'antd';
 import { Link, useParams } from 'react-router';
-import { TitlesService, type Copy } from '../../api';
+import { CopiesService, type Copy } from '../../api';
 
 export default function CopyListPage() {
   const [copies, setCopies] = useState<Copy[]>([]);
@@ -18,8 +18,8 @@ export default function CopyListPage() {
     if (!titleId) return;
     try {
       setLoading(true);
-      const data = await TitlesService.getAllCopiesOfATitle({ titleId });
-      setCopies(data || []);
+      const data = await /*TitlesService.getAllCopiesOfATitle*/ CopiesService.getCollection({ titleId });
+      setCopies(data.content || []);
     } catch (error) {
       message.error('Không thể tải danh sách bản sao');
     } finally {
@@ -30,7 +30,7 @@ export default function CopyListPage() {
   const handleDelete = async (copyId: string) => {
     if (!titleId) return;
     try {
-      await TitlesService.deleteCopyById({ titleId, copyId });
+      await CopiesService.deleteItem({ titleId, copyId });
       message.success('Xóa bản sao thành công');
       fetchCopies();
     } catch (error) {
@@ -81,7 +81,9 @@ export default function CopyListPage() {
             </Link>
           )}
           {record.status !== 'AVAILABLE' && (
-            <Button type="link">Xem lượt mượn</Button>
+            <Link to={`/borrows?copyId=${record.id}`}>
+              <Button type="link">Xem lượt mượn</Button>
+            </Link>
           )}
           <Link to={`/titles/${titleId}/copies/${record.id}`}>
             <Button>Sửa</Button>

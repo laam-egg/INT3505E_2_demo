@@ -56,7 +56,7 @@ class Collection(Resource):
     
 
 
-    @api.doc("Lấy danh sách tất cả các copies của một title, có pagination.")
+    @api.doc(description="Lấy danh sách tất cả các copies của một title, có pagination.")
     @api.expect(get_collection_qp)
     @h.returns(
         copy_dto,
@@ -71,7 +71,7 @@ class Collection(Resource):
     
 
 
-    @api.doc("Thêm bản sao mới cho một đầu sách.")
+    @api.doc(description="Thêm bản sao mới cho một đầu sách.")
     @api.expect(copy_create_dto)
     @h.returns(
         copy_dto,
@@ -90,7 +90,7 @@ class Item(Resource):
     service = service
 
 
-    @api.doc("Lấy copy theo ID")
+    @api.doc(description="Lấy copy theo ID")
     @h.returns(
         copy_dto,
         self_links=lambda content: [url_for("v1.copies_item", titleId=content["titleId"], copyId=content["id"])],
@@ -101,7 +101,7 @@ class Item(Resource):
 
 
     
-    @api.doc("Sửa toàn bộ copy, theo ID")
+    @api.doc(description="Sửa toàn bộ copy, theo ID")
     @api.expect(copy_replace_dto)
     @h.returns(
         copy_dto,
@@ -114,7 +114,7 @@ class Item(Resource):
     
 
 
-    @api.doc("Sửa một phần copy, theo ID")
+    @api.doc(description="Sửa một phần copy, theo ID")
     @api.expect(copy_update_dto)
     @h.returns(
         copy_dto,
@@ -128,7 +128,7 @@ class Item(Resource):
 
 
 
-    @api.doc("Xóa copy, theo ID")
+    @api.doc(description="Xóa copy, theo ID")
     @h.returns(
         api.model("empty", {}),
         self_links=lambda content: [],
@@ -136,4 +136,4 @@ class Item(Resource):
     )
     def delete(self, titleId, copyId):
         self.service.delete_item_by_id_and_titleId(titleId, copyId)
-        return {}
+        return { "titleId": titleId }

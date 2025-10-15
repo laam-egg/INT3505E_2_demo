@@ -1,6 +1,9 @@
 from flask import Flask, url_for
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)  # Enable CORS for all routes
 
 with app.app_context():
     from .controllers import register_api_controllers

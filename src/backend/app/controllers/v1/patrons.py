@@ -51,7 +51,7 @@ class Collection(Resource):
     
 
 
-    @api.doc("Lấy danh sách tất cả các patrons, có pagination.")
+    @api.doc(description="Lấy danh sách tất cả các patrons, có pagination.")
     @api.expect(get_collection_qp)
     @h.returns(
         patron_dto,
@@ -66,7 +66,7 @@ class Collection(Resource):
     
 
 
-    @api.doc("Thêm patron mới.")
+    @api.doc(description="Thêm patron mới.")
     @api.expect(patron_create_dto)
     @h.returns(
         patron_dto,
@@ -85,7 +85,7 @@ class Item(Resource):
     service = service
 
 
-    @api.doc("Lấy patron theo ID")
+    @api.doc(description="Lấy patron theo ID")
     @h.returns(
         patron_dto,
         self_links=lambda content: [url_for("v1.patrons_item", patronId=content["id"])],
@@ -96,7 +96,7 @@ class Item(Resource):
 
 
     
-    @api.doc("Sửa toàn bộ patron, theo ID")
+    @api.doc(description="Sửa toàn bộ patron, theo ID")
     @api.expect(patron_replace_dto)
     @h.returns(
         patron_dto,
@@ -109,7 +109,7 @@ class Item(Resource):
     
 
 
-    @api.doc("Sửa một phần patron, theo ID")
+    @api.doc(description="Sửa một phần patron, theo ID")
     @api.expect(patron_update_dto)
     @h.returns(
         patron_dto,
@@ -124,7 +124,7 @@ class Item(Resource):
 
 
 
-    @api.doc("Xóa patron, theo ID")
+    @api.doc(description="Xóa patron, theo ID")
     @h.returns(
         api.model("empty", {}),
         self_links=lambda content: [],

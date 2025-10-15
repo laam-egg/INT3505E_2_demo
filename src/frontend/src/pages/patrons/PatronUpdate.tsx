@@ -19,8 +19,8 @@ export default function PatronUpdatePage() {
   const fetchPatron = async (patronId: string) => {
     try {
       setLoading(true);
-      const data = await PatronsService.getPatronById({ patronId });
-      setPatron(data);
+      const data = await PatronsService.getItem({ patronId });
+      setPatron(data.content || null);
       form.setFieldsValue(data);
     } catch (error) {
       message.error('Không thể tải thông tin người dùng');
@@ -35,7 +35,7 @@ export default function PatronUpdatePage() {
 
     try {
       setLoading(true);
-      await PatronsService.updatePatronById({ patronId: id, payload: values });
+      await PatronsService.patchItem({ patronId: id, payload: values });
       message.success('Cập nhật người dùng thành công');
       navigate('/patrons');
     } catch (error) {

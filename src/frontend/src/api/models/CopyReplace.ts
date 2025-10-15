@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type CopyUpdate = {
+export type CopyReplace = {
     /**
      * Code/identifier của bản sao
      */
-    code?: string;
+    code: string;
 };
 

@@ -64,7 +64,7 @@ class Collection(Resource):
     
 
 
-    @api.doc("Lấy danh sách tất cả các titles, có pagination.")
+    @api.doc(description="Lấy danh sách tất cả các titles, có pagination.")
     @api.expect(get_collection_qp)
     @h.returns(
         title_dto,
@@ -79,7 +79,7 @@ class Collection(Resource):
     
 
 
-    @api.doc("Thêm đầu sách mới.")
+    @api.doc(description="Thêm đầu sách mới.")
     @api.expect(title_create_dto)
     @h.returns(
         title_dto,
@@ -98,7 +98,7 @@ class Item(Resource):
     service = service
 
 
-    @api.doc("Lấy title theo ID")
+    @api.doc(description="Lấy title theo ID")
     @h.returns(
         title_dto,
         self_links=lambda content: [url_for("v1.titles_item", titleId=content["id"])],
@@ -109,7 +109,7 @@ class Item(Resource):
 
 
     
-    @api.doc("Sửa toàn bộ title, theo ID")
+    @api.doc(description="Sửa toàn bộ title, theo ID")
     @api.expect(title_replace_dto)
     @h.returns(
         title_dto,
@@ -122,7 +122,7 @@ class Item(Resource):
     
 
 
-    @api.doc("Sửa một phần title, theo ID")
+    @api.doc(description="Sửa một phần title, theo ID")
     @api.expect(title_update_dto)
     @h.returns(
         title_dto,
@@ -136,7 +136,7 @@ class Item(Resource):
 
 
 
-    @api.doc("Xóa title, theo ID")
+    @api.doc(description="Xóa title, theo ID")
     @h.returns(
         api.model("empty", {}),
         self_links=lambda content: [],

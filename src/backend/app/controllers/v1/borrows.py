@@ -15,19 +15,19 @@ api = borrows_api
 ## STEP 2. DEFINE THE MODELS/DTOs ##
 ####################################
 
-borrow_create_dto = api.model("borrowCreate", {
+borrow_create_dto = api.model("BorrowCreate", {
     "patronId": fields.String(required=True, description="ID người mượn (patron)"),
     "copyId": fields.String(required=True, description="ID bản sao của một sách nào đó được mượn"),
 })
 
-borrow_update_dto = api.model("borrowUpdate", {
+borrow_update_dto = api.model("BorrowUpdate", {
     "status": fields.String(required=False, description="Trạng thái mới của lượt mượn: BORROWING, RETURNED, or LOST"),
 })
 
 # Lượt mượn không được phép sửa (patch) hoặc replace (put)
 # bất kỳ thông tin nào khác status.
 
-borrow_dto = api.clone("borrow", borrow_create_dto, {
+borrow_dto = api.clone("Borrow", borrow_create_dto, {
     "id": fields.String(readonly=True, description="ID lượt mượn"),
     "status": fields.String(required=True, description="Trạng thái của lượt mượn: BORROWING, RETURNED, or LOST"),
     "createdAt": fields.String(readonly=True, description="Thời gian mượn (tức thời gian tạo lượt mượn)"),
@@ -52,11 +52,16 @@ h = HATEOAS(api)
 class Collection(Resource):
     service = service
 
-    get_collection_qp = Pageable.pageable_query_params()
+    get_collection_qp = (
+        Pageable
+            .pageable_query_params()
+            .add_argument('patronId', type=str, required=False, help='Patron ID (optional)')
+            .add_argument('copyId', type=str, required=False, help="Copy ID (optional)")
+    )
     
 
 
-    @api.doc("Lấy danh sách tất cả các borrows, có pagination.")
+    @api.doc(description="Lấy danh sách tất cả các borrows, có pagination. Có thể lọc theo patronId.")
     @api.expect(get_collection_qp)
     @h.returns(
         borrow_dto,
@@ -67,11 +72,22 @@ class Collection(Resource):
     def get(self):
         args = self.get_collection_qp.parse_args()
         pageable = Pageable.from_query_params(args)
-        return self.service.get_collection(pageable)
+
+        patronId = args.get("patronId")
+        patronId = str(patronId) if patronId else None
+
+        copyId = args.get("copyId")
+        copyId = str(copyId) if copyId else None
+
+        return self.service.get_collection_by_patronId_and_copyId_orderBy_statusLastUpdatedAt_DESC(
+            patronId,
+            copyId,
+            pageable,
+        )
     
 
 
-    @api.doc("Thêm borrow mới.")
+    @api.doc(description="Thêm borrow mới.")
     @api.expect(borrow_create_dto)
     @h.returns(
         borrow_dto,
@@ -90,7 +106,7 @@ class Item(Resource):
     service = service
 
 
-    @api.doc("Lấy borrow theo ID")
+    @api.doc(description="Lấy borrow theo ID")
     @h.returns(
         borrow_dto,
         self_links=lambda content: [url_for("v1.borrows_item", borrowId=content["id"])],
@@ -102,7 +118,7 @@ class Item(Resource):
     
 
 
-    @api.doc("Sửa một phần borrow, theo ID")
+    @api.doc(description="Sửa một phần borrow, theo ID")
     @api.expect(borrow_update_dto)
     @h.returns(
         borrow_dto,
@@ -117,7 +133,7 @@ class Item(Resource):
 
 
 
-    @api.doc("Xóa borrow, theo ID")
+    @api.doc(description="Xóa borrow, theo ID")
     @h.returns(
         api.model("empty", {}),
         self_links=lambda content: [],

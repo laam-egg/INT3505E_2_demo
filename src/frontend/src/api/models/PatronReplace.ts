@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type CopyUpdate = {
+export type PatronReplace = {
     /**
-     * Code/identifier của bản sao
+     * Patron name
      */
-    code?: string;
+    name: string;
 };
 

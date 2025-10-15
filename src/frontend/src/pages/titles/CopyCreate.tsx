@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { useNavigate, useParams } from 'react-router';
-import { TitlesService, type CopyCreate } from '../../api';
+import { CopiesService, type CopyCreate } from '../../api';
 
 export default function CopyCreatePage() {
   const [form] = Form.useForm();
@@ -14,7 +14,8 @@ export default function CopyCreatePage() {
     
     try {
       setLoading(true);
-      await TitlesService.createANewCopyOfATitle({ titleId, payload: values });
+      // await TitlesService.createANewCopyOfATitle
+      await CopiesService.postCollection({ titleId, payload: values });
       message.success('Thêm bản sao thành công');
       navigate(`/titles/${titleId}/copies`);
     } catch (error) {

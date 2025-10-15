@@ -4,19 +4,19 @@
 /* eslint-disable */
 export type Copy = {
     /**
-     * The copy ID
-     */
-    readonly id?: string;
-    /**
-     * The title ID this copy belongs to
-     */
-    titleId: string;
-    /**
-     * Copy code/identifier
+     * Code/identifier của bản sao
      */
     code: string;
     /**
-     * Current status: AVAILABLE, BORROWED, or LOST
+     * ID của bản sao
+     */
+    readonly id?: string;
+    /**
+     * ID của đầu sách tương ứng
+     */
+    titleId: string;
+    /**
+     * Trạng thái hiện tại của bản sao: AVAILABLE, BORROWED, or LOST
      */
     readonly status?: string;
 };

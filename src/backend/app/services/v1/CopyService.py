@@ -94,7 +94,7 @@ class CopyService(BaseCRUDService):
         if isinstance(copy, list):
             return [*map(self.add_status, copy)]
         
-        copyId = str(copy.get("id", copy.get("_id", None)))
+        copyId = str(copy.get("id", copy.get("_id", "")))
         if not copyId:
             raise RuntimeError("No ID in Copy document???", copy)
         
@@ -106,8 +106,10 @@ class CopyService(BaseCRUDService):
     def get_item_status_by_id(self, copyId):
         """Lấy trạng thái của copy dựa vào lượt mượn gần nhất."""
         pageable = Pageable(0, 1)
-        copy_borrows = self.borrow_service.get_collection_by_copyId_orderBy_statusLastUpdatedAt_DESC(
-            copyId, pageable
+        copy_borrows = self.borrow_service.get_collection_by_patronId_and_copyId_orderBy_statusLastUpdatedAt_DESC(
+            patronId=None,
+            copyId=copyId,
+            pageable=pageable,
         )
         if len(copy_borrows) == 0:
             return "AVAILABLE"

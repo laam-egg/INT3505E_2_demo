@@ -1,13 +1,15 @@
 from flask_restx import reqparse
 
+DEFAULT_PAGE_SIZE = 100
+
 class Pageable:
     def __init__(self, page, size):
         # type: (Pageable, int, int) -> None
         """
         page number starts at 0.
         """
-        self.page = page
-        self.size = size
+        self.page = page or 0
+        self.size = size or DEFAULT_PAGE_SIZE
 
     def get_skip(self):
         return self.page * self.size
@@ -26,10 +28,11 @@ class Pageable:
     
     @staticmethod
     def pageable_query_params(parser=None):
+        # type: (reqparse.RequestParser | None) -> reqparse.RequestParser
         if not parser:
             parser = reqparse.RequestParser()
         parser.add_argument('pageNumber', type=int, required=False, default=0, help='Page number')
-        parser.add_argument('pageSize', type=int, required=False, default=2, help='Page size')
+        parser.add_argument('pageSize', type=int, required=False, default=DEFAULT_PAGE_SIZE, help='Page size')
         return parser
     
     @classmethod
