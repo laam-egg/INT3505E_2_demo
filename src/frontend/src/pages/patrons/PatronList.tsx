@@ -14,8 +14,8 @@ export default function PatronListPage() {
   const fetchPatrons = async () => {
     try {
       setLoading(true);
-      const data = await PatronsService.getAllPatrons({});
-      setPatrons(data || []);
+      const data = await PatronsService.getCollection({});
+      setPatrons(data.content || []);
     } catch (error) {
       message.error('Không thể tải danh sách người dùng');
     } finally {
@@ -25,7 +25,7 @@ export default function PatronListPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      await PatronsService.deletePatronById({ patronId: id });
+      await PatronsService.deleteItem({ patronId: id });
       message.success('Xóa người dùng thành công');
       fetchPatrons();
     } catch (error) {

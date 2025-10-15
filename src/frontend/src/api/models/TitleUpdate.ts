@@ -4,23 +4,23 @@
 /* eslint-disable */
 export type TitleUpdate = {
     /**
-     * Title name
+     * Tên đầu sách
      */
     name?: string;
     /**
-     * Edition number
+     * Số thứ tự của lần tái bản
      */
     edition?: number;
     /**
-     * Newline-separated list of authors
+     * Tên các tác giả, phân cách bằng newlines
      */
     authors?: string;
     /**
-     * Year of publication
+     * Năm xuất bản
      */
     yearOfPublication?: number;
     /**
-     * Newline-separated list of tags
+     * Các thẻ/tags, phân cách bằng newlines
      */
     tags?: string;
 };

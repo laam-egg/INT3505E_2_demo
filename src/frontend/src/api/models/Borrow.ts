@@ -4,27 +4,27 @@
 /* eslint-disable */
 export type Borrow = {
     /**
-     * The borrow ID
-     */
-    readonly id?: string;
-    /**
-     * The patron ID
+     * ID người mượn (patron)
      */
     patronId: string;
     /**
-     * The copy ID
+     * ID bản sao của một sách nào đó được mượn
      */
     copyId: string;
     /**
-     * Borrow status: BORROWING, RETURNED, or LOST
+     * ID lượt mượn
+     */
+    readonly id?: string;
+    /**
+     * Trạng thái của lượt mượn: BORROWING, RETURNED, or LOST
      */
     status: string;
     /**
-     * Borrow creation timestamp
+     * Thời gian mượn (tức thời gian tạo lượt mượn)
      */
     readonly createdAt?: string;
     /**
-     * Last status update timestamp
+     * Thời gian cuối cùng trạng thái của lượt mượn này được cập nhật
      */
     readonly statusLastUpdatedAt?: string;
 };

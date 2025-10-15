@@ -4,43 +4,43 @@
 /* eslint-disable */
 export type Title = {
     /**
-     * The title ID
-     */
-    readonly id?: string;
-    /**
-     * Title name
+     * Tên đầu sách
      */
     name: string;
     /**
-     * Edition number
+     * Số thứ tự của lần tái bản
      */
     edition: number;
     /**
-     * Newline-separated list of authors
+     * Tên các tác giả, phân cách bằng newlines
      */
     authors: string;
     /**
-     * Year of publication
+     * Năm xuất bản
      */
     yearOfPublication: number;
     /**
-     * Newline-separated list of tags
+     * Các thẻ/tags, phân cách bằng newlines
      */
     tags: string;
     /**
-     * Total number of copies
+     * ID của đầu sách
+     */
+    readonly id?: string;
+    /**
+     * Tổng số bản sao của đầu sách này
      */
     readonly totalCopies?: number;
     /**
-     * Number of available copies
+     * Số bản sao đang có sẵn (có thể mượn được)
      */
     readonly availableCopies?: number;
     /**
-     * Number of borrowed copies
+     * Số bản sao đang được mượn
      */
     readonly borrowedCopies?: number;
     /**
-     * Number of lost copies
+     * Số bản sao đã bị báo hỏng/mất
      */
     readonly lostCopies?: number;
 };

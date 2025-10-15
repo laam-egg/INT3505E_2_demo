@@ -2,19 +2,57 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Patron } from '../models/Patron';
+import type { empty_HATEOAS } from '../models/empty_HATEOAS';
+import type { Patron_HATEOAS } from '../models/Patron_HATEOAS';
 import type { PatronCreate } from '../models/PatronCreate';
+import type { PatronList_HATEOAS } from '../models/PatronList_HATEOAS';
+import type { PatronReplace } from '../models/PatronReplace';
 import type { PatronUpdate } from '../models/PatronUpdate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class PatronsService {
     /**
-     * Create a new patron
-     * @returns Patron Success
+     * Lấy danh sách tất cả các patrons, có pagination.
+     * @returns PatronList_HATEOAS Success
      * @throws ApiError
      */
-    public static createANewPatron({
+    public static getCollection({
+        pageNumber,
+        pageSize = 100,
+        xFields,
+    }: {
+        /**
+         * Page number
+         */
+        pageNumber?: number,
+        /**
+         * Page size
+         */
+        pageSize?: number,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<PatronList_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/patrons/',
+            headers: {
+                'X-Fields': xFields,
+            },
+            query: {
+                'pageNumber': pageNumber,
+                'pageSize': pageSize,
+            },
+        });
+    }
+    /**
+     * Thêm patron mới.
+     * @returns Patron_HATEOAS Success
+     * @throws ApiError
+     */
+    public static postCollection({
         payload,
         xFields,
     }: {
@@ -23,7 +61,7 @@ export class PatronsService {
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Patron> {
+    }): CancelablePromise<Patron_HATEOAS> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/patrons/',
@@ -34,45 +72,76 @@ export class PatronsService {
         });
     }
     /**
-     * Get all patrons with pagination
-     * @returns Patron Success
+     * Xóa patron, theo ID
+     * @returns empty_HATEOAS Success
      * @throws ApiError
      */
-    public static getAllPatrons({
+    public static deleteItem({
+        patronId,
         xFields,
     }: {
+        patronId: string,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Array<Patron>> {
+    }): CancelablePromise<empty_HATEOAS> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/patrons/',
+            method: 'DELETE',
+            url: '/patrons/{patronId}',
+            path: {
+                'patronId': patronId,
+            },
             headers: {
                 'X-Fields': xFields,
             },
         });
     }
     /**
-     * Update a patron
-     * @returns Patron Success
+     * Lấy patron theo ID
+     * @returns Patron_HATEOAS Success
      * @throws ApiError
      */
-    public static updatePatronById({
+    public static getItem({
+        patronId,
+        xFields,
+    }: {
+        patronId: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Patron_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/patrons/{patronId}',
+            path: {
+                'patronId': patronId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
+        });
+    }
+    /**
+     * Sửa toàn bộ patron, theo ID
+     * @returns Patron_HATEOAS Success
+     * @throws ApiError
+     */
+    public static putItem({
         patronId,
         payload,
         xFields,
     }: {
         patronId: string,
-        payload: PatronUpdate,
+        payload: PatronReplace,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Patron> {
+    }): CancelablePromise<Patron_HATEOAS> {
         return __request(OpenAPI, {
-            method: 'PATCH',
+            method: 'PUT',
             url: '/patrons/{patronId}',
             path: {
                 'patronId': patronId,
@@ -84,40 +153,24 @@ export class PatronsService {
         });
     }
     /**
-     * Delete a patron
-     * @returns any Success
+     * Sửa một phần patron, theo ID
+     * @returns Patron_HATEOAS Success
      * @throws ApiError
      */
-    public static deletePatronById({
+    public static patchItem({
         patronId,
-    }: {
-        patronId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/patrons/{patronId}',
-            path: {
-                'patronId': patronId,
-            },
-        });
-    }
-    /**
-     * Get a specific patron by ID
-     * @returns Patron Success
-     * @throws ApiError
-     */
-    public static getPatronById({
-        patronId,
+        payload,
         xFields,
     }: {
         patronId: string,
+        payload: PatronUpdate,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Patron> {
+    }): CancelablePromise<Patron_HATEOAS> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'PATCH',
             url: '/patrons/{patronId}',
             path: {
                 'patronId': patronId,
@@ -125,6 +178,7 @@ export class PatronsService {
             headers: {
                 'X-Fields': xFields,
             },
+            body: payload,
         });
     }
 }

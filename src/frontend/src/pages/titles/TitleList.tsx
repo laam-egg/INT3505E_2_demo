@@ -14,8 +14,8 @@ export default function TitleListPage() {
   const fetchTitles = async () => {
     try {
       setLoading(true);
-      const data = await TitlesService.getAllTitles({});
-      setTitles(data || []);
+      const data = await TitlesService.getCollection({});
+      setTitles(data.content || []);
     } catch (error) {
       message.error('Không thể tải danh sách đầu sách');
     } finally {
@@ -25,7 +25,7 @@ export default function TitleListPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      await TitlesService.deleteTitleById({ titleId: id });
+      await TitlesService.deleteItem({ titleId: id });
       message.success('Xóa đầu sách thành công');
       fetchTitles();
     } catch (error) {

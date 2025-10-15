@@ -11,7 +11,7 @@ export default function PatronCreatePage() {
   const handleSubmit = async (values: PatronCreate) => {
     try {
       setLoading(true);
-      await PatronsService.createANewPatron({ payload: values });
+      await PatronsService.postCollection({ payload: values });
       message.success('Thêm người dùng thành công');
       navigate('/patrons');
     } catch (error) {

@@ -2,19 +2,68 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Borrow } from '../models/Borrow';
+import type { Borrow_HATEOAS } from '../models/Borrow_HATEOAS';
 import type { BorrowCreate } from '../models/BorrowCreate';
+import type { BorrowList_HATEOAS } from '../models/BorrowList_HATEOAS';
 import type { BorrowUpdate } from '../models/BorrowUpdate';
+import type { empty_HATEOAS } from '../models/empty_HATEOAS';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class BorrowsService {
     /**
-     * Create a new borrow
-     * @returns Borrow Success
+     * Lấy danh sách tất cả các borrows, có pagination. Có thể lọc theo patronId.
+     * @returns BorrowList_HATEOAS Success
      * @throws ApiError
      */
-    public static createANewBorrow({
+    public static getCollection({
+        pageNumber,
+        pageSize = 100,
+        patronId,
+        copyId,
+        xFields,
+    }: {
+        /**
+         * Page number
+         */
+        pageNumber?: number,
+        /**
+         * Page size
+         */
+        pageSize?: number,
+        /**
+         * Patron ID (optional)
+         */
+        patronId?: string,
+        /**
+         * Copy ID (optional)
+         */
+        copyId?: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<BorrowList_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/borrows/',
+            headers: {
+                'X-Fields': xFields,
+            },
+            query: {
+                'pageNumber': pageNumber,
+                'pageSize': pageSize,
+                'patronId': patronId,
+                'copyId': copyId,
+            },
+        });
+    }
+    /**
+     * Thêm borrow mới.
+     * @returns Borrow_HATEOAS Success
+     * @throws ApiError
+     */
+    public static postCollection({
         payload,
         xFields,
     }: {
@@ -23,7 +72,7 @@ export class BorrowsService {
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Borrow> {
+    }): CancelablePromise<Borrow_HATEOAS> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/borrows/',
@@ -34,40 +83,63 @@ export class BorrowsService {
         });
     }
     /**
-     * Get all borrows with optional patron filtering
-     * @returns Borrow Success
+     * Xóa borrow, theo ID
+     * @returns empty_HATEOAS Success
      * @throws ApiError
      */
-    public static getAllBorrows({
-        patronId,
+    public static deleteItem({
+        borrowId,
         xFields,
     }: {
-        /**
-         * Filter by patron ID
-         */
-        patronId?: string,
+        borrowId: string,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Array<Borrow>> {
+    }): CancelablePromise<empty_HATEOAS> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/borrows/',
+            method: 'DELETE',
+            url: '/borrows/{borrowId}',
+            path: {
+                'borrowId': borrowId,
+            },
             headers: {
                 'X-Fields': xFields,
-            },
-            query: {
-                'patronId': patronId,
             },
         });
     }
     /**
-     * Update borrow status
-     * @returns Borrow Success
+     * Lấy borrow theo ID
+     * @returns Borrow_HATEOAS Success
      * @throws ApiError
      */
-    public static updateBorrowStatusById({
+    public static getItem({
+        borrowId,
+        xFields,
+    }: {
+        borrowId: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Borrow_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/borrows/{borrowId}',
+            path: {
+                'borrowId': borrowId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
+        });
+    }
+    /**
+     * Sửa một phần borrow, theo ID
+     * @returns Borrow_HATEOAS Success
+     * @throws ApiError
+     */
+    public static patchItem({
         borrowId,
         payload,
         xFields,
@@ -78,7 +150,7 @@ export class BorrowsService {
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Borrow> {
+    }): CancelablePromise<Borrow_HATEOAS> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/borrows/{borrowId}',
@@ -89,50 +161,6 @@ export class BorrowsService {
                 'X-Fields': xFields,
             },
             body: payload,
-        });
-    }
-    /**
-     * Delete a borrow
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deleteBorrowById({
-        borrowId,
-    }: {
-        borrowId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/borrows/{borrowId}',
-            path: {
-                'borrowId': borrowId,
-            },
-        });
-    }
-    /**
-     * Get a specific borrow by ID
-     * @returns Borrow Success
-     * @throws ApiError
-     */
-    public static getBorrowById({
-        borrowId,
-        xFields,
-    }: {
-        borrowId: string,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Borrow> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/borrows/{borrowId}',
-            path: {
-                'borrowId': borrowId,
-            },
-            headers: {
-                'X-Fields': xFields,
-            },
         });
     }
 }

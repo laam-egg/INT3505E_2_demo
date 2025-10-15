@@ -21,14 +21,14 @@ export default function TitleUpdatePage() {
   const fetchTitle = async (titleId: string) => {
     try {
       setLoading(true);
-      const data = await TitlesService.getTitleById({ titleId });
-      setTitle(data);
+      const data = await TitlesService.getItem({ titleId });
+      setTitle(data.content || null);
       
       // Set form values, converting newline-separated strings back to form format
       form.setFieldsValue({
         ...data,
-        authors: data.authors?.split('\n').join('\n'),
-        tags: data.tags?.split('\n').join('\n')
+        authors: data.content?.authors?.split('\n').join('\n'),
+        tags: data.content?.tags?.split('\n').join('\n')
       });
     } catch (error) {
       message.error('Không thể tải thông tin đầu sách');
@@ -53,7 +53,7 @@ export default function TitleUpdatePage() {
         tags: values.tags?.split('\n').filter((t: string) => t.trim()).join('\n') || ''
       };
 
-      await TitlesService.updateTitleById({ titleId: id, payload });
+      await TitlesService.patchItem({ titleId: id, payload });
       message.success('Cập nhật đầu sách thành công');
       navigate('/titles');
     } catch (error) {

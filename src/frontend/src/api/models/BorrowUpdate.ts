@@ -4,8 +4,8 @@
 /* eslint-disable */
 export type BorrowUpdate = {
     /**
-     * New borrow status: BORROWING, RETURNED, or LOST
+     * Trạng thái mới của lượt mượn: BORROWING, RETURNED, or LOST
      */
-    status: string;
+    status?: string;
 };
 

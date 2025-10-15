@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Form, Input, Button, message, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router';
-import { TitlesService, type Copy, type CopyUpdate } from '../../api';
+import { CopiesService, type Copy, type CopyUpdate } from '../../api';
 
 export default function CopyUpdatePage() {
   const [form] = Form.useForm();
@@ -20,8 +20,8 @@ export default function CopyUpdatePage() {
     if (!titleId || !copyId) return;
     try {
       setLoading(true);
-      const data = await TitlesService.getCopyById({ titleId, copyId });
-      setCopy(data);
+      const data = await CopiesService.getItem({ titleId, copyId });
+      setCopy(data.content || null);
       form.setFieldsValue(data);
     } catch (error) {
       message.error('Không thể tải thông tin bản sao');
@@ -36,7 +36,7 @@ export default function CopyUpdatePage() {
 
     try {
       setLoading(true);
-      await TitlesService.updateCopyById({ titleId, copyId, payload: values });
+      await CopiesService.patchItem({ titleId, copyId, payload: values });
       message.success('Cập nhật bản sao thành công');
       navigate(`/titles/${titleId}/copies`);
     } catch (error) {

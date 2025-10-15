@@ -2,22 +2,57 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Copy } from '../models/Copy';
-import type { CopyCreate } from '../models/CopyCreate';
-import type { CopyUpdate } from '../models/CopyUpdate';
-import type { Title } from '../models/Title';
+import type { empty_HATEOAS } from '../models/empty_HATEOAS';
+import type { Title_HATEOAS } from '../models/Title_HATEOAS';
 import type { TitleCreate } from '../models/TitleCreate';
+import type { TitleList_HATEOAS } from '../models/TitleList_HATEOAS';
+import type { TitleReplace } from '../models/TitleReplace';
 import type { TitleUpdate } from '../models/TitleUpdate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class TitlesService {
     /**
-     * Create a new title
-     * @returns Title Success
+     * Lấy danh sách tất cả các titles, có pagination.
+     * @returns TitleList_HATEOAS Success
      * @throws ApiError
      */
-    public static createANewTitle({
+    public static getCollection({
+        pageNumber,
+        pageSize = 100,
+        xFields,
+    }: {
+        /**
+         * Page number
+         */
+        pageNumber?: number,
+        /**
+         * Page size
+         */
+        pageSize?: number,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<TitleList_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/titles/',
+            headers: {
+                'X-Fields': xFields,
+            },
+            query: {
+                'pageNumber': pageNumber,
+                'pageSize': pageSize,
+            },
+        });
+    }
+    /**
+     * Thêm đầu sách mới.
+     * @returns Title_HATEOAS Success
+     * @throws ApiError
+     */
+    public static postCollection({
         payload,
         xFields,
     }: {
@@ -26,7 +61,7 @@ export class TitlesService {
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Title> {
+    }): CancelablePromise<Title_HATEOAS> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/titles/',
@@ -37,32 +72,92 @@ export class TitlesService {
         });
     }
     /**
-     * Get all titles with pagination
-     * @returns Title Success
+     * Xóa title, theo ID
+     * @returns empty_HATEOAS Success
      * @throws ApiError
      */
-    public static getAllTitles({
+    public static deleteItem({
+        titleId,
         xFields,
     }: {
+        titleId: string,
         /**
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Array<Title>> {
+    }): CancelablePromise<empty_HATEOAS> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/titles/',
+            method: 'DELETE',
+            url: '/titles/{titleId}',
+            path: {
+                'titleId': titleId,
+            },
             headers: {
                 'X-Fields': xFields,
             },
         });
     }
     /**
-     * Update a title
-     * @returns Title Success
+     * Lấy title theo ID
+     * @returns Title_HATEOAS Success
      * @throws ApiError
      */
-    public static updateTitleById({
+    public static getItem({
+        titleId,
+        xFields,
+    }: {
+        titleId: string,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Title_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/titles/{titleId}',
+            path: {
+                'titleId': titleId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
+        });
+    }
+    /**
+     * Sửa toàn bộ title, theo ID
+     * @returns Title_HATEOAS Success
+     * @throws ApiError
+     */
+    public static putItem({
+        titleId,
+        payload,
+        xFields,
+    }: {
+        titleId: string,
+        payload: TitleReplace,
+        /**
+         * An optional fields mask
+         */
+        xFields?: string,
+    }): CancelablePromise<Title_HATEOAS> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/titles/{titleId}',
+            path: {
+                'titleId': titleId,
+            },
+            headers: {
+                'X-Fields': xFields,
+            },
+            body: payload,
+        });
+    }
+    /**
+     * Sửa một phần title, theo ID
+     * @returns Title_HATEOAS Success
+     * @throws ApiError
+     */
+    public static patchItem({
         titleId,
         payload,
         xFields,
@@ -73,7 +168,7 @@ export class TitlesService {
          * An optional fields mask
          */
         xFields?: string,
-    }): CancelablePromise<Title> {
+    }): CancelablePromise<Title_HATEOAS> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/titles/{titleId}',
@@ -84,187 +179,6 @@ export class TitlesService {
                 'X-Fields': xFields,
             },
             body: payload,
-        });
-    }
-    /**
-     * Delete a title and all its copies
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deleteTitleById({
-        titleId,
-    }: {
-        titleId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/titles/{titleId}',
-            path: {
-                'titleId': titleId,
-            },
-        });
-    }
-    /**
-     * Get a specific title by ID
-     * @returns Title Success
-     * @throws ApiError
-     */
-    public static getTitleById({
-        titleId,
-        xFields,
-    }: {
-        titleId: string,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Title> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/titles/{titleId}',
-            path: {
-                'titleId': titleId,
-            },
-            headers: {
-                'X-Fields': xFields,
-            },
-        });
-    }
-    /**
-     * Create a new copy of a title
-     * @returns Copy Success
-     * @throws ApiError
-     */
-    public static createANewCopyOfATitle({
-        titleId,
-        payload,
-        xFields,
-    }: {
-        titleId: string,
-        payload: CopyCreate,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Copy> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/titles/{titleId}/copies',
-            path: {
-                'titleId': titleId,
-            },
-            headers: {
-                'X-Fields': xFields,
-            },
-            body: payload,
-        });
-    }
-    /**
-     * Get all copies of a specific title
-     * @returns Copy Success
-     * @throws ApiError
-     */
-    public static getAllCopiesOfATitle({
-        titleId,
-        xFields,
-    }: {
-        titleId: string,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Array<Copy>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/titles/{titleId}/copies',
-            path: {
-                'titleId': titleId,
-            },
-            headers: {
-                'X-Fields': xFields,
-            },
-        });
-    }
-    /**
-     * Update a copy
-     * @returns Copy Success
-     * @throws ApiError
-     */
-    public static updateCopyById({
-        titleId,
-        copyId,
-        payload,
-        xFields,
-    }: {
-        titleId: string,
-        copyId: string,
-        payload: CopyUpdate,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Copy> {
-        return __request(OpenAPI, {
-            method: 'PATCH',
-            url: '/titles/{titleId}/copies/{copyId}',
-            path: {
-                'titleId': titleId,
-                'copyId': copyId,
-            },
-            headers: {
-                'X-Fields': xFields,
-            },
-            body: payload,
-        });
-    }
-    /**
-     * Delete a copy
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static deleteCopyById({
-        titleId,
-        copyId,
-    }: {
-        titleId: string,
-        copyId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/titles/{titleId}/copies/{copyId}',
-            path: {
-                'titleId': titleId,
-                'copyId': copyId,
-            },
-        });
-    }
-    /**
-     * Get a specific copy by ID
-     * @returns Copy Success
-     * @throws ApiError
-     */
-    public static getCopyById({
-        titleId,
-        copyId,
-        xFields,
-    }: {
-        titleId: string,
-        copyId: string,
-        /**
-         * An optional fields mask
-         */
-        xFields?: string,
-    }): CancelablePromise<Copy> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/titles/{titleId}/copies/{copyId}',
-            path: {
-                'titleId': titleId,
-                'copyId': copyId,
-            },
-            headers: {
-                'X-Fields': xFields,
-            },
         });
     }
 }

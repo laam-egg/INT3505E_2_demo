@@ -4,7 +4,7 @@
 /* eslint-disable */
 export type CopyUpdate = {
     /**
-     * Copy code/identifier
+     * Code/identifier của bản sao
      */
     code?: string;
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Form, Select, Button, message } from 'antd';
 import { useNavigate, useSearchParams } from 'react-router';
-import { BorrowsService, PatronsService, TitlesService, type BorrowCreate, type Patron, type Title, type Copy } from '../../api';
+import { BorrowsService, PatronsService, TitlesService, type BorrowCreate, type Patron, type Title, type Copy, CopiesService } from '../../api';
 
 const { Option } = Select;
 
@@ -36,8 +36,8 @@ export default function BorrowCreatePage() {
 
   const fetchPatrons = async () => {
     try {
-      const data = await PatronsService.getAllPatrons({});
-      setPatrons(data || []);
+      const data = await PatronsService.getCollection({});
+      setPatrons(data.content || []);
     } catch (error) {
       message.error('Không thể tải danh sách người dùng');
     }
@@ -45,8 +45,8 @@ export default function BorrowCreatePage() {
 
   const fetchTitles = async () => {
     try {
-      const data = await TitlesService.getAllTitles({});
-      setTitles(data || []);
+      const data = await TitlesService.getCollection({});
+      setTitles(data.content || []);
     } catch (error) {
       message.error('Không thể tải danh sách đầu sách');
     }
@@ -54,9 +54,9 @@ export default function BorrowCreatePage() {
 
   const fetchCopies = async (titleId: string) => {
     try {
-      const data = await TitlesService.getAllCopiesOfATitle({ titleId });
+      const data = await CopiesService.getCollection({ titleId }) // TitlesService.getAllCopiesOfATitle({ titleId });
       // Only show available copies
-      const availableCopies = (data || []).filter(copy => copy.status === 'AVAILABLE');
+      const availableCopies = (data.content || []).filter(copy => copy.status === 'AVAILABLE');
       setCopies(availableCopies);
     } catch (error) {
       message.error('Không thể tải danh sách bản sao');
@@ -77,7 +77,7 @@ export default function BorrowCreatePage() {
         copyId: values.copyId
       };
       
-      await BorrowsService.createANewBorrow({ payload });
+      await BorrowsService.postCollection({ payload });
       message.success('Cho mượn sách thành công');
       navigate('/borrows');
     } catch (error) {
