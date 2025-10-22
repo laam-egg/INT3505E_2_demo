@@ -23,6 +23,9 @@ patrons_collection = db.patrons
 titles_collection = db.titles
 copies_collection = db.copies
 borrows_collection = db.borrows
+users_collection = db.users
+
+users_collection.create_index("email", unique=True)
 
 def serialize_mongo_doc(doc):
     """Convert MongoDB document to JSON serializable format"""

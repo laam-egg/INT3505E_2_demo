@@ -1,9 +1,21 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, jsonify
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from flask_bcrypt import Bcrypt
+import os
 
 app = Flask(__name__)
 
 CORS(app)  # Enable CORS for all routes
+
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "")
+if not JWT_SECRET_KEY:
+    raise RuntimeError(f"Environment variable JWT_SECRET_KEY not set")
+
+app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
+
+jwt = JWTManager(app)
+bcrypt = Bcrypt(app)
 
 with app.app_context():
     from .controllers import register_api_controllers
