@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  description: Simple demo API
+  title: My API
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api/v1
+paths:
+  /products:
+    get:
+      operationId: products_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Product"
+                type: array
+          description: A list of Products
+      summary: List all Products
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    post:
+      operationId: products_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductCreate"
+        required: true
+      responses:
+        "201":
+          description: Created
+      summary: Create a new Product
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /users:
+    get:
+      operationId: users_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/User"
+                type: array
+          description: A list of users
+      summary: List all users
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    post:
+      operationId: users_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreate"
+        required: true
+      responses:
+        "201":
+          description: Created
+      summary: Create a new user
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas:
+    User:
+      example:
+        name: name
+        email: email
+      properties:
+        name:
+          title: name
+          type: string
+        email:
+          title: email
+          type: string
+      title: User
+      type: object
+    UserCreate:
+      allOf:
+      - $ref: "#/components/schemas/User"
+      - properties:
+          password:
+            type: string
+        type: object
+      example:
+        password: password
+        name: name
+        email: email
+      required:
+      - email
+      - name
+      - password
+      title: UserCreate
+    Product:
+      example:
+        name: name
+        id: id
+      properties:
+        id:
+          title: id
+          type: string
+        name:
+          title: name
+          type: string
+      title: Product
+      type: object
+    ProductCreate:
+      example:
+        name: name
+      properties:
+        name:
+          title: name
+          type: string
+      required:
+      - name
+      title: ProductCreate
+      type: object
