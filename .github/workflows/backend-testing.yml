@@ -43,17 +43,18 @@ jobs:
           pip install -r requirements.txt
       
       - name: Start Flask backend in the background
+        working-directory: src/backend
         env:
           MONGODB_URL: mongodb://localhost:27019/soa_demo
         run: |
           # export FLASK_ENV=testing
           export JWT_SECRET_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'));")
           flask --version
-          nohup flask run --host=0.0.0.0 --port=5000 > src/backend/flask.log 2>&1 &
+          nohup flask run --host=0.0.0.0 --port=5000 > flask.log 2>&1 &
       
       - name: Check backend is reachable
         run: |
-          for i in {1..50}; do
+          for i in {1..70}; do
             if curl -s http://localhost:5000/ > /dev/null; then
               echo "OK - Flask started"
               break
