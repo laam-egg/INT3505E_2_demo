@@ -45,7 +45,7 @@ jobs:
       - name: Start Flask backend in the background
         working-directory: src/backend
         env:
-          MONGODB_URL: mongodb://localhost:27019/soa_demo
+          MONGO_URL: mongodb://localhost:27019/soa_demo
         run: |
           # export FLASK_ENV=testing
           export JWT_SECRET_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'));")
@@ -54,7 +54,7 @@ jobs:
       
       - name: Check backend is reachable
         run: |
-          for i in {1..70}; do
+          for i in {1..20}; do
             if curl -s http://localhost:5000/ > /dev/null; then
               echo "OK - Flask started"
               break
