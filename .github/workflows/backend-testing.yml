@@ -1,0 +1,81 @@
+name: Run Newman API Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  newman-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      # Start MongoDB as a service container
+      mongo:
+        image: mongo:6
+        ports:
+          - 27019:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      
+      - name: Set up Node.js for Newman and JWT_SECRET_KEY generation
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Python dependencies
+        working-directory: src/backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Start Flask backend in the background
+        env:
+          MONGODB_URL: mongodb://localhost:27019/soa_demo
+        run: |
+          # export FLASK_ENV=testing
+          export JWT_SECRET_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'));")
+          flask --version
+          nohup flask run --host=0.0.0.0 --port=5000 > src/backend/flask.log 2>&1 &
+      
+      - name: Check backend is reachable
+        run: |
+          for i in {1..50}; do
+            if curl -s http://localhost:5000/ > /dev/null; then
+              echo "OK - Flask started"
+              break
+            fi
+            sleep 1
+          done
+
+          curl -f http://localhost:5000/ || (cat src/backend/flask.log && exit 1)
+
+      - name: Install Newman + HTML extra reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run Newman with HTML report
+        working-directory: src/backend
+        run: |
+          newman run ./tests/postman/Test_Library_API_VuTungLam.postman_collection.json \
+            -r htmlextra \
+            --reporter-htmlextra-export report.html
+    
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-html-report
+          path: src/backend/report.html

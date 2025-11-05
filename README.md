@@ -9,6 +9,10 @@
   - [Run](#run)
     - [Backend](#backend-1)
     - [Frontend](#frontend-1)
+  - [Testing](#testing)
+    - [Backend API Testing with Postman](#backend-api-testing-with-postman)
+    - [Backend API Testing with Newman](#backend-api-testing-with-newman)
+    - [CI/CD](#cicd)
 
 ![demo image](docs/images/frontend_demo_1.png)
 
@@ -101,4 +105,49 @@ yarn dev
 # OR:
 yarn build
 yarn preview
+```
+
+## Testing
+
+### Backend API Testing with Postman
+
+Import the JSON file `<project_root>/src/backend/tests/postman/Test_Library_API_VuTungLam.postman_collection.json`
+into Postman as a Collection, then run it.
+
+![Backend API Testing with Postman](docs/images/backend_api_testing_postman.png)
+
+### Backend API Testing with Newman
+
+First, install Newman
+
+```sh
+npm install -g newman
+```
+
+Run the tests:
+
+```sh
+cd <project_root>
+cd src/backend
+
+newman run ./tests/postman/Test_Library_API_VuTungLam.postman_collection.json
+```
+
+Result:
+
+![Backend API Testing with Newman](docs/images/backend_api_testing_newman.png)
+
+### CI/CD
+
+Backend API Testing with Newman has been added to this
+project's GitHub Actions workflow.
+
+To run the workflow locally for debugging purpose, install
+[`nektos act`](https://nektosact.com/installation/index.html),
+then run:
+
+```sh
+cd <project_root>
+
+act
 ```

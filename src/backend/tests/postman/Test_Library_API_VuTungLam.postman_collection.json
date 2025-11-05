@@ -1,0 +1,431 @@
+{
+	"info": {
+		"_postman_id": "e9b1f043-2685-4ef4-996f-7a1d84ab1774",
+		"name": "Test Library API (VuTungLam)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29268916"
+	},
+	"item": [
+		{
+			"name": "Test GET /titles",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const API_VERSION = pm.collectionVariables.get(\"API_VERSION\");",
+							"",
+							"if (!API_VERSION) {",
+							"    throw new Error(\"No API_VERSION?\");",
+							"}",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Must have proper content\", function () {",
+							"    pm.expect(Array.isArray(",
+							"        pm.response.json().content",
+							"    )).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Must have proper HATEOAS links\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(typeof data._links).to.eql(\"object\");",
+							"    for (const key in data._links) {",
+							"        pm.expect(data._links[key]).to.be.an(\"array\");",
+							"        for (const url of data._links[key]) {",
+							"            pm.expect(typeof url).to.eql(\"string\");",
+							"            pm.expect(url).to.match(",
+							"                new RegExp(`^\\\\/api\\\\/v${API_VERSION}\\/`),",
+							"            );",
+							"        }",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/titles/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test POST /titles",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const EDITION = Math.round(Math.random() * 10000);",
+							"",
+							"const payload = {",
+							"    \"name\": \"New book inserted by Postman/Newman, edition \" + EDITION,",
+							"    \"edition\": EDITION,",
+							"    \"authors\": \"Postman\\nNewman\\nVuTungLam\",",
+							"    \"yearOfPublication\": 2025,",
+							"    \"tags\": \"test\\ndemo\\nunreal\"",
+							"};",
+							"",
+							"pm.environment.set(\"PAYLOAD\", JSON.stringify(payload));",
+							"",
+							"pm.request.body.update(JSON.stringify(payload));",
+							"pm.request.addHeader(\"Content-Type: application/json\");",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const PAYLOAD = pm.environment.get('PAYLOAD');",
+							"",
+							"if (!PAYLOAD) {",
+							"    throw new Error(\"No PAYLOAD?\");",
+							"}",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response body matches payload\", function () {",
+							"    const responseBody = pm.response.json();",
+							"    pm.expect(responseBody.content).to.deep.contains(JSON.parse(PAYLOAD));",
+							"    pm.environment.set(\"TITLE_ID\", responseBody.content.id);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/titles/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test PATCH /titles/:id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const TITLE_ID = pm.environment.get(\"TITLE_ID\");",
+							"if (!TITLE_ID) {",
+							"    throw new Error(\"No TITLE_ID?\");",
+							"}",
+							"",
+							"pm.request.url += (\"\" + TITLE_ID);",
+							"",
+							"const newTitle = \"This book's title has changed at \" +",
+							"    new Date().toLocaleTimeString();",
+							"",
+							"pm.environment.set(\"NEW_TITLE\", newTitle);",
+							"",
+							"pm.request.body.update(",
+							"    JSON.stringify({",
+							"        \"name\": newTitle,",
+							"    })",
+							");",
+							"pm.request.addHeader(\"Content-Type: application/json\");",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const TITLE_ID = pm.environment.get(\"TITLE_ID\");",
+							"if (!TITLE_ID) {",
+							"    throw new Error(\"No TITLE_ID?\");",
+							"}",
+							"",
+							"const NEW_TITLE = pm.environment.get(\"NEW_TITLE\");",
+							"if (!NEW_TITLE) {",
+							"    throw new Error(\"No NEW_TITLE?\");",
+							"}",
+							"",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Modified the correct document\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.content.id).to.equal(TITLE_ID);",
+							"});",
+							"",
+							"pm.test(\"New title updated\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.content.name).to.equal(NEW_TITLE);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "{{base_url}}/titles/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test GET /titles/:id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const TITLE_ID = pm.environment.get(\"TITLE_ID\");",
+							"if (!TITLE_ID) {",
+							"    throw new Error(\"No TITLE_ID?\");",
+							"}",
+							"",
+							"pm.request.url += (\"\" + TITLE_ID);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const TITLE_ID = pm.environment.get(\"TITLE_ID\");",
+							"if (!TITLE_ID) {",
+							"    throw new Error(\"No TITLE_ID?\");",
+							"}",
+							"",
+							"const PAYLOAD = pm.environment.get('PAYLOAD');",
+							"if (!PAYLOAD) {",
+							"    throw new Error(\"No PAYLOAD?\");",
+							"}",
+							"",
+							"const NEW_TITLE = pm.environment.get(\"NEW_TITLE\");",
+							"if (!NEW_TITLE) {",
+							"    throw new Error(\"No NEW_TITLE?\");",
+							"}",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"ID matches\", function () {",
+							"    pm.expect(pm.response.json().content.id).to.equal(TITLE_ID);",
+							"});",
+							"",
+							"pm.test(\"Content matches\", function () {",
+							"    pm.expect(pm.response.json().content).to.deep.contains({",
+							"        ...JSON.parse(PAYLOAD),",
+							"        // changed name from previous PATCH",
+							"        name: NEW_TITLE,",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "{{base_url}}/titles/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test DELETE /titles/:id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const TITLE_ID = pm.environment.get(\"TITLE_ID\");",
+							"if (!TITLE_ID) {",
+							"    throw new Error(\"No TITLE_ID?\");",
+							"}",
+							"",
+							"pm.request.url += (\"\" + TITLE_ID);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "{{base_url}}/titles/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test GET /titles/:id AFTER DELETED",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const TITLE_ID = pm.environment.get(\"TITLE_ID\");",
+							"if (!TITLE_ID) {",
+							"    throw new Error(\"No TITLE_ID?\");",
+							"}",
+							"",
+							"pm.request.url += (\"\" + TITLE_ID);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Must not find this one\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "{{base_url}}/titles/"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api/v1"
+		},
+		{
+			"key": "API_VERSION",
+			"value": "1"
+		}
+	]
+}
