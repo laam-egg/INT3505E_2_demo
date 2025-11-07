@@ -90,4 +90,4 @@ jobs:
         uses: grafana/run-k6-action@v1
         with:
           path: |
-            ./tests/k6/*.js
+            ./src/backend/tests/k6/*.js
