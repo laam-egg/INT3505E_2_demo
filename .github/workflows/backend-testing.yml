@@ -1,4 +1,4 @@
-name: Run Newman API Tests
+name: Run Backend API Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
 
 jobs:
-  newman-tests:
+  backend-api-tests:
     runs-on: ubuntu-latest
 
     services:
@@ -39,7 +39,7 @@ jobs:
       - name: Set up k6
         uses: grafana/setup-k6-action@v1
         with:
-          version: v1.3.0
+          k6-version: v1.3.0
 
       - name: Install Python dependencies
         working-directory: src/backend
