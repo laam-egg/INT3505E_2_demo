@@ -12,6 +12,7 @@
   - [Testing](#testing)
     - [Backend API Testing with Postman](#backend-api-testing-with-postman)
     - [Backend API Testing with Newman](#backend-api-testing-with-newman)
+    - [Backend Load Testing with k6](#backend-load-testing-with-k6)
     - [CI/CD](#cicd)
 
 ![demo image](docs/images/frontend_demo_1.png)
@@ -137,9 +138,26 @@ Result:
 
 ![Backend API Testing with Newman](docs/images/backend_api_testing_newman.png)
 
+### Backend Load Testing with k6
+
+First, [install k6](https://grafana.com/docs/k6/latest/set-up/install-k6).
+
+Then, run the tests:
+
+```sh
+cd <project_root>
+cd src/backend
+
+k6 run ./tests/k6/load_test.js
+```
+
+Result:
+
+![Backend Load Testing with k6](docs/images/backend_api_load_testing_k6.png)
+
 ### CI/CD
 
-Backend API Testing with Newman has been added to this
+Backend API Testing with Newman and k6 has been added to this
 project's GitHub Actions workflow.
 
 To run the workflow locally for debugging purpose, install

@@ -80,3 +80,9 @@ jobs:
         with:
           name: newman-html-report
           path: src/backend/report.html
+      
+      - name: k6
+        if: always()
+        working-directory: src/backend
+        run: |
+          k6 run ./tests/k6/load_test.js
