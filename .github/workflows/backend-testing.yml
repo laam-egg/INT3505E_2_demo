@@ -35,6 +35,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
+        with:
+          version: v1.3.0
 
       - name: Install Python dependencies
         working-directory: src/backend
@@ -81,8 +86,8 @@ jobs:
           name: newman-html-report
           path: src/backend/report.html
       
-      - name: k6
-        if: always()
-        working-directory: src/backend
-        run: |
-          k6 run ./tests/k6/load_test.js
+      - name: Performance Testing with k6
+        uses: grafana/run-k6-action@v1
+        with:
+          path: |
+            ./tests/k6/*.js
