@@ -27,7 +27,7 @@ _api = Api(
     v2,
     title='Version 2',
     version='2',
-    description='Add JWT authentication.',
+    description='The second stable version, with JWT authentication.\n\nWARNING: This API version has been deprecated and will be removed in the near future. Please migrate to API v3 - the latest stable version.',
 
     authorizations=authorizations,
 )

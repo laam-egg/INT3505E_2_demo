@@ -7,7 +7,7 @@ _api = Api(
     v1,
     title='Version 1',
     version='1',
-    description='The first stable version.',
+    description='The first stable version.\n\nWARNING: This API version has been deprecated and will be removed in the near future. Please migrate to API v3 - the latest stable version.',
 )
 
 from .patrons import patrons_api
