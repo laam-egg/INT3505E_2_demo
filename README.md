@@ -4,16 +4,17 @@
   - [Thông tin chung](#thông-tin-chung)
   - [Tài liệu thiết kế](#tài-liệu-thiết-kế)
   - [Setup](#setup)
-    - [Backend](#backend)
-    - [Frontend](#frontend)
+    - [Setup: Backend](#setup-backend)
+    - [Setup: Frontend](#setup-frontend)
   - [Run](#run)
-    - [Backend](#backend-1)
-    - [Frontend](#frontend-1)
+    - [Run: Backend](#run-backend)
+    - [Run: Frontend](#run-frontend)
   - [Testing](#testing)
     - [Backend API Testing with Postman](#backend-api-testing-with-postman)
     - [Backend API Testing with Newman](#backend-api-testing-with-newman)
     - [Backend Load Testing with k6](#backend-load-testing-with-k6)
-    - [CI/CD](#cicd)
+    - [Backend API Backward Compatibility Testing with oasdiff](#backend-api-backward-compatibility-testing-with-oasdiff)
+  - [CI/CD](#cicd)
 
 ![demo image](docs/images/frontend_demo_1.png)
 
@@ -34,7 +35,7 @@
 
 ## Setup
 
-### Backend
+### Setup: Backend
 
 Yêu cầu Python 3.12+,
 MongoDB 8.0+ (các phiên
@@ -56,7 +57,7 @@ copy file `.env.example` vào file mới
 tên là `.env`. Sửa các biến môi trường
 trong file đó cho phù hợp.
 
-### Frontend
+### Setup: Frontend
 
 Yêu cầu Node.js 22+ (các phiên
 bản cũ hơn có thể vẫn
@@ -72,7 +73,7 @@ yarn
 
 ## Run
 
-### Backend
+### Run: Backend
 
 ```sh
 cd <project_root>
@@ -82,7 +83,7 @@ source ./venv/bin/activate
 flask run --host=0.0.0.0 --port=5000
 ```
 
-### Frontend
+### Run: Frontend
 
 Sau khi chạy backend, cần tạo lại
 OpenAPI contracts:
@@ -169,10 +170,36 @@ Result:
 
 ![Backend Load Testing with k6](docs/images/backend_api_load_testing_k6.png)
 
-### CI/CD
+### Backend API Backward Compatibility Testing with oasdiff
 
-Backend API Testing with Newman and k6 has been added to this
-project's GitHub Actions workflow.
+First, install `oasdiff`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/oasdiff/oasdiff/main/install.sh | sudo sh
+```
+
+(I've tested with version 1.11.7 ; the above command installs the latest.)
+
+Then, run this to make sure API v3 is backward-compatible
+with API v2:
+
+```sh
+OLD_SPEC="http://localhost:5000/api/v2/swagger.json"
+NEW_SPEC="http://localhost:5000/api/v3/swagger.json"
+
+oasdiff changelog --fail-on ERR "$OLD_SPEC" "$NEW_SPEC"
+```
+
+which would fail (nonzero exit code) if there are any
+*breaking changes*.
+
+## CI/CD
+
+This project's GitHub Actions workflow run the following tests:
+
+- 1. [Backend API Testing with Newman](#backend-api-testing-with-newman)
+- 2. [Backend Load Testing with k6](#backend-load-testing-with-k6)
+- 3. [Backend API Backward Compatibility Testing with oasdiff (API v3-v2)](#backend-api-backward-compatibility-testing-with-oasdiff)
 
 To run the workflow locally for debugging purpose, install
 [`nektos act`](https://nektosact.com/installation/index.html),
