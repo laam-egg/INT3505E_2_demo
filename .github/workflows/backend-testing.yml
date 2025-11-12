@@ -82,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: newman-html-reports
-          path: src/backend/postman/newman-reports/
+          path: src/backend/tests/postman/newman-reports/
 
       - name: Performance Testing with k6
         uses: grafana/run-k6-action@v1
