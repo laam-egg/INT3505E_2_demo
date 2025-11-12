@@ -36,6 +36,9 @@ jobs:
         with:
           node-version: 22
       
+      - name: Install Newman + HTML extra reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
       - name: Set up k6
         uses: grafana/setup-k6-action@v1
         with:
@@ -69,9 +72,6 @@ jobs:
 
           curl -f http://localhost:5000/ || (cat src/backend/flask.log && exit 1)
 
-      - name: Install Newman + HTML extra reporter
-        run: npm install -g newman newman-reporter-htmlextra
-
       - name: Run all Postman collections with HTML reports
         working-directory: src/backend
         run: |
@@ -82,7 +82,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: newman-html-reports
-          path: src/backend/newman-reports/
+          path: src/backend/postman/newman-reports/
+
       - name: Performance Testing with k6
         uses: grafana/run-k6-action@v1
         with:
