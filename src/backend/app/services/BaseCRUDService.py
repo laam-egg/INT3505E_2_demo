@@ -1,5 +1,5 @@
-from ...db import str_to_objectid
-from ...utils.pageable import Pageable
+from ..db import str_to_objectid
+from ..utils.pageable import Pageable
 from typing import Any
 from pymongo import ASCENDING, DESCENDING
 from pymongo.collection import Collection

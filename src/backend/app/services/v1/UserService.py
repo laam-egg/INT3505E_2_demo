@@ -1,6 +1,6 @@
 from typing import Any
 from ...utils.pageable import Pageable
-from .BaseCRUDService import BaseCRUDService
+from ..BaseCRUDService import BaseCRUDService
 from flask_jwt_extended import create_access_token
 from flask_restx import abort
 import bcrypt

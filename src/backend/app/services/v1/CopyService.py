@@ -1,5 +1,5 @@
 from pymongo.collection import Collection
-from .BaseCRUDService import BaseCRUDService
+from ..BaseCRUDService import BaseCRUDService
 from .BorrowService import BorrowService
 from ...utils.pageable import Pageable
 from pymongo import ASCENDING, DESCENDING

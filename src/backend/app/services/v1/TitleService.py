@@ -1,6 +1,6 @@
 from ...db import titles_collection
 from pymongo.collection import Collection
-from .BaseCRUDService import BaseCRUDService
+from ..BaseCRUDService import BaseCRUDService
 from .CopyService import CopyService
 from ...utils.pageable import Pageable
 from typing import Any, override
