@@ -635,6 +635,134 @@
 				"url": "{{base_url}}/titles/"
 			},
 			"response": []
+		},
+		{
+			"name": "Test DELETE /users/:id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"(() => {",
+							"    const USER_INFO = JSON.parse(",
+							"        pm.environment.get(\"USER_INFO\")",
+							"    );",
+							"    const userId = USER_INFO.id;",
+							"    if (!userId) {",
+							"        throw new Error(\"No user ID?\");",
+							"    }",
+							"",
+							"    pm.request.url += (\"\" + userId);",
+							"",
+							"    const ACCESS_TOKEN = pm.environment.get(\"ACCESS_TOKEN\");",
+							"    pm.request.headers.add({",
+							"        key: \"Authorization\",",
+							"        value: \"Bearer \" + ACCESS_TOKEN,",
+							"    });",
+							"})();",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"(() => {",
+							"    pm.test(\"Status code is 200\", function () {",
+							"        pm.response.to.have.status(200);",
+							"    });",
+							"})();",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/users/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test DELETE /users/:id AFTER DELETED (still old token)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"(() => {",
+							"    const USER_INFO = JSON.parse(",
+							"        pm.environment.get(\"USER_INFO\")",
+							"    );",
+							"    const userId = USER_INFO.id;",
+							"    if (!userId) {",
+							"        throw new Error(\"No user ID?\");",
+							"    }",
+							"",
+							"    pm.request.url += (\"\" + userId);",
+							"",
+							"    const ACCESS_TOKEN = pm.environment.get(\"ACCESS_TOKEN\");",
+							"    pm.request.headers.add({",
+							"        key: \"Authorization\",",
+							"        value: \"Bearer \" + ACCESS_TOKEN,",
+							"    });",
+							"})();",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"(() => {",
+							"    pm.test(\"Status code is 404\", function () {",
+							"        pm.response.to.have.status(404);",
+							"    });",
+							"})();",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/users/"
+			},
+			"response": []
 		}
 	],
 	"event": [
