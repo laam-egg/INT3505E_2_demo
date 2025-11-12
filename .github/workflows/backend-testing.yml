@@ -48,6 +48,10 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/oasdiff/oasdiff/main/install.sh | sudo sh
           oasdiff -v
+      
+      - name: Install Schemathesis
+        run: |
+          pip install schemathesis requests
 
       - name: Install Python dependencies
         working-directory: src/backend
@@ -101,3 +105,9 @@ jobs:
           NEW_SPEC="http://localhost:5000/api/v3/swagger.json"
 
           oasdiff changelog --fail-on ERR "$OLD_SPEC" "$NEW_SPEC"
+
+      - name: Backend API Contract Testing with Schemathesis
+        run: |
+          NEW_SPEC="http://localhost:5000/api/v3/swagger.json"
+
+          schemathesis run "$NEW_SPEC" --checks=content_type_conformance --max-examples=3 --phases=examples

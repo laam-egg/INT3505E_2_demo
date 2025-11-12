@@ -14,6 +14,7 @@
     - [Backend API Testing with Newman](#backend-api-testing-with-newman)
     - [Backend Load Testing with k6](#backend-load-testing-with-k6)
     - [Backend API Backward Compatibility Testing with oasdiff](#backend-api-backward-compatibility-testing-with-oasdiff)
+    - [Backend API Contract Testing with Schemathesis](#backend-api-contract-testing-with-schemathesis)
   - [CI/CD](#cicd)
 
 ![demo image](docs/images/frontend_demo_1.png)
@@ -192,6 +193,30 @@ oasdiff changelog --fail-on ERR "$OLD_SPEC" "$NEW_SPEC"
 
 which would fail (nonzero exit code) if there are any
 *breaking changes*.
+
+### Backend API Contract Testing with Schemathesis
+
+First, install Specmatic (could be in any
+Python environment):
+
+```sh
+pip install schemathesis requests
+```
+
+(I've tested with version 4.5.0 ; the above command installs the latest.)
+
+Then, run it against API v3, for example:
+
+```sh
+NEW_SPEC="http://localhost:5000/api/v3/swagger.json"
+
+schemathesis run "$NEW_SPEC" --checks=content_type_conformance --max-examples=3 --phases=examples
+```
+
+The above command would only check for `Content-Type`
+conformance of the API under test. Customize the
+flags per Schemathesis' official documentation for
+desired tests.
 
 ## CI/CD
 
