@@ -24,6 +24,7 @@ titles_collection = db.titles
 copies_collection = db.copies
 borrows_collection = db.borrows
 users_collection = db.users
+payments_collection = db.payments
 
 users_collection.create_index("email", unique=True)
 
