@@ -1,6 +1,6 @@
 from flask import Blueprint
-from flask_restx import Api, abort
-from flask import jsonify
+from flask_restx import Api #, abort
+# from flask import jsonify
 from flask_jwt_extended.exceptions import (
     NoAuthorizationError,
     InvalidHeaderError,
@@ -50,15 +50,15 @@ _api.add_namespace(payments_api)
 
 @_api.errorhandler(NoAuthorizationError)
 def handle_no_auth_error(e):
-    return jsonify({ "error": "Missing Authorization header"}), 401
+    return { "error": "Missing Authorization header"}, 401
 
 @_api.errorhandler(InvalidHeaderError)
 def handle_invalid_header(e):
-    return jsonify({ "error": "Invalid Authorization header"}), 422
+    return { "error": "Invalid Authorization header"}, 422
 
 @_api.errorhandler(JWTDecodeError)
 def handle_invalid_token(e):
-    return jsonify({ "error": "Invalid token"}), 401
+    return { "error": "Invalid token"}, 401
 
 @_api.errorhandler(WrongTokenError)
 @_api.errorhandler(RevokedTokenError)
@@ -66,4 +66,4 @@ def handle_invalid_token(e):
 @_api.errorhandler(UserClaimsVerificationError)
 @_api.errorhandler(Forbidden)
 def handle_bad_token(e):
-    return jsonify({ "error": "Invalid token"}), 401
+    return { "error": "Invalid token"}, 401
