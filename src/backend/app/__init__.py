@@ -5,6 +5,7 @@ from flask_bcrypt import Bcrypt
 import os
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 CORS(app)  # Enable CORS for all routes
 

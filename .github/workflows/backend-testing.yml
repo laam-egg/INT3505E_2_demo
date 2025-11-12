@@ -72,20 +72,17 @@ jobs:
       - name: Install Newman + HTML extra reporter
         run: npm install -g newman newman-reporter-htmlextra
 
-      - name: Run Newman with HTML report
+      - name: Run all Postman collections with HTML reports
         working-directory: src/backend
         run: |
-          newman run ./tests/postman/Test_Library_API_VuTungLam.postman_collection.json \
-            -r htmlextra \
-            --reporter-htmlextra-export report.html
-    
-      - name: Upload HTML report
+          ./tests/postman/run_all.sh
+      
+      - name: Upload HTML reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: newman-html-report
-          path: src/backend/report.html
-      
+          name: newman-html-reports
+          path: src/backend/newman-reports/
       - name: Performance Testing with k6
         uses: grafana/run-k6-action@v1
         with:

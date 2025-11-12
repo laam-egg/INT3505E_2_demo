@@ -112,31 +112,45 @@ yarn preview
 
 ### Backend API Testing with Postman
 
-Import the JSON file `<project_root>/src/backend/tests/postman/Test_Library_API_VuTungLam.postman_collection.json`
+Import any JSON file under `<project_root>/src/backend/tests/postman/`
 into Postman as a Collection, then run it.
 
 ![Backend API Testing with Postman](docs/images/backend_api_testing_postman.png)
 
 ### Backend API Testing with Newman
 
-First, install Newman
+First, install Newman and its HTML reporter (exporter)
 
 ```sh
-npm install -g newman
+npm install -g newman newman-reporter-htmlextra
 ```
 
-Run the tests:
+You could run each test manually:
 
 ```sh
 cd <project_root>
 cd src/backend
 
-newman run ./tests/postman/Test_Library_API_VuTungLam.postman_collection.json
+newman run ./tests/postman/Test_Library_API_v2_VuTungLam.postman_collection.json
 ```
 
-Result:
-
 ![Backend API Testing with Newman](docs/images/backend_api_testing_newman.png)
+
+or you could run all tests AND export
+the results in HTML, which will be
+available under
+`<project_root>/src/backend/tests/postman/newman-reports`:
+
+```sh
+cd <project_root>
+cd src/backend
+
+./tests/postman/run_all.sh
+```
+
+![Backend API Testing with Newman: Run All Collections](docs/images/backend_api_testing_newman_run_all.png)
+
+![Backend API Testing with Newman: Run All Collections: Results in HTML](docs/images/backend_api_testing_newman_run_all_html.png)
 
 ### Backend Load Testing with k6
 
