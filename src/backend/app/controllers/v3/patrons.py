@@ -1,6 +1,5 @@
 from flask import request, url_for
 from flask_restx import Namespace, Resource, fields
-from ...services.v1.PatronService import PatronService
 from ...utils.pageable import Pageable
 from ...utils.hateoas import HATEOAS
 from flask_jwt_extended import jwt_required

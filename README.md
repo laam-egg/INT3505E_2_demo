@@ -196,7 +196,7 @@ which would fail (nonzero exit code) if there are any
 
 ### Backend API Contract Testing with Schemathesis
 
-First, install Specmatic (could be in any
+First, install Schemathesis (could be in any
 Python environment):
 
 ```sh
