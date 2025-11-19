@@ -1,10 +1,36 @@
-from flask import Flask, url_for, jsonify
+import traceback
+from flask import Flask, url_for, request, got_request_exception
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 import os
 
+from .utils.prometheus_metrics import setup_prometheus_metrics, ERROR_COUNT
+from .utils.rate_limit import setup_rate_limiter
+
+from .utils.log import log
+
 app = Flask(__name__)
+
+def handle_every_exception(exception):
+    ERROR_COUNT.labels(method=request.method, endpoint=request.path, error_type=type(exception).__name__).inc()
+    log.error(''.join(traceback.TracebackException.from_exception(exception).format()))
+    return {"error": str(exception), "message": "Internal Server Error!!!"}, 500
+
+@app.errorhandler(Exception)
+def handle_Exception(exception):
+    return handle_every_exception(exception)
+
+def handle_request_exception(sender, exception, *args, **kwargs):
+    handle_every_exception(exception)
+    return
+
+got_request_exception.connect(handle_request_exception, app)
+
+
+app = setup_prometheus_metrics(app)
+app = setup_rate_limiter(app)
+
 app.url_map.strict_slashes = False
 
 CORS(app)  # Enable CORS for all routes

@@ -46,7 +46,7 @@ class Login(Resource):
 
 
     @api.doc(description="Đăng nhập")
-    @api.expect(auth_login_dto)
+    @h.expect(auth_login_dto, validate=True)
     @h.returns(
         auth_dto,
         self_links=lambda content: [url_for("v3.users_item", userId=content["user"]["id"])],

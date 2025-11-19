@@ -58,3 +58,13 @@ class HATEOAS:
             
             return wrap_with_marshalling(wrapper)
         return decorator
+    
+    def expect(self, inputs: Model | OrderedModel, *args, **input_kwargs):
+        api = self.api
+        kwargs = {
+            "validate": True,
+        }
+        kwargs.update(input_kwargs)
+        def decorator(func):
+            return api.expect(inputs, *args, **kwargs)(func)
+        return decorator

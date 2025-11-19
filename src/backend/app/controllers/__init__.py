@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, url_for
 from .v0a import v0a
 from .v0b import v0b
+from .v0c import v0c
 from .v1 import v1
 from .v2 import v2
 from .v3 import v3
@@ -14,6 +15,7 @@ class ApiVersion:
 API_VERSIONS = [
     ApiVersion("v0a", v0a),
     ApiVersion("v0b", v0b),
+    ApiVersion("v0c", v0c),
     ApiVersion("v1", v1),
     ApiVersion("v2", v2),
     ApiVersion("v3", v3),

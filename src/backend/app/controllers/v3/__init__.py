@@ -67,3 +67,8 @@ def handle_invalid_token(e):
 @_api.errorhandler(Forbidden)
 def handle_bad_token(e):
     return { "error": "Invalid token"}, 401
+
+# import pybreaker
+# @_api.errorhandler(pybreaker.CircuitBreakerError)
+# def handle_circuit_breaker_error(e):
+#     return { "error": "Service temporarily unavailable due to high failure rate. Please try again later."}, 503
