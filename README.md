@@ -16,6 +16,7 @@
     - [Backend API Backward Compatibility Testing with oasdiff](#backend-api-backward-compatibility-testing-with-oasdiff)
     - [Backend API Contract Testing with Schemathesis](#backend-api-contract-testing-with-schemathesis)
   - [CI/CD](#cicd)
+  - [Prometheus + Grafana](#prometheus--grafana)
 
 ![demo image](docs/images/frontend_demo_1.png)
 
@@ -235,3 +236,18 @@ cd <project_root>
 
 act
 ```
+
+## Prometheus + Grafana
+
+```sh
+cd <project_root>
+cd src/backend
+
+docker compose up --build
+```
+
+Then access Prometheus dashboard via `http://localhost:9091`,
+and Grafana via `http://localhost:3001`.
+
+On Grafana dashboard, when adding Prometheus datasource,
+enter URL `http://prometheus:9000`.
