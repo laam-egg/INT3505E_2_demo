@@ -63,6 +63,8 @@ jobs:
         working-directory: src/backend
         env:
           MONGO_URL: mongodb://localhost:27019/soa_demo
+          # Required by k6 test at src/backend/tests/k6/load_test.js
+          RATE_LIMIT_BY_X_FORWARDED_FOR: true
         run: |
           # export FLASK_ENV=testing
           export JWT_SECRET_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'));")
