@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 import os
+from werkzeug.exceptions import HTTPException
 
 from .utils.prometheus_metrics import setup_prometheus_metrics, ERROR_COUNT
 from .utils.rate_limit import setup_rate_limiter
@@ -13,9 +14,12 @@ from .utils.log import log
 app = Flask(__name__)
 
 def handle_every_exception(exception):
-    ERROR_COUNT.labels(method=request.method, endpoint=request.path, error_type=type(exception).__name__).inc()
+    status_code = 500
+    if isinstance(exception, HTTPException):
+        status_code = exception.code
+    ERROR_COUNT.labels(method=request.method, endpoint=request.path, error_type=type(exception).__name__, status_code=status_code).inc()
     log.error(''.join(traceback.TracebackException.from_exception(exception).format()))
-    return {"error": str(exception), "message": "Internal Server Error!!!"}, 500
+    return {"error": str(exception), "message": "Internal Server Error!!!"}, status_code
 
 @app.errorhandler(Exception)
 def handle_Exception(exception):

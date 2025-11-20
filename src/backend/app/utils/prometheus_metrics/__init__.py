@@ -7,7 +7,7 @@ from ..log import log
 
 REQUEST_COUNT = Counter("http_requests_total", "Total HTTP requests", ["method", "endpoint", "http_status"])
 REQUEST_LATENCY = Histogram("http_request_duration_seconds", "HTTP request latency", ["endpoint"])
-ERROR_COUNT = Counter('errors_total', 'Total count of application errors', ["method", "endpoint", "error_type"])
+ERROR_COUNT = Counter('errors_total', 'Total count of application errors', ["method", "endpoint", "error_type", "status_code"])
 
 def setup_prometheus_metrics(app: Flask):
     @app.before_request
