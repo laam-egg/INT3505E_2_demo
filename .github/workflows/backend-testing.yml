@@ -23,13 +23,6 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Start RabbitMQ
-        uses: namoshek/rabbitmq-github-action@v1
-        with:
-          version: '4.2.1'
-          ports: '5673:5672 15673:15672' # Map ports for AMQP and Management UI
-          container-name: 'mqtt'
-
       - name: Checkout code
         uses: actions/checkout@v4
       
@@ -71,13 +64,33 @@ jobs:
         run: |
           pip install -r requirements.txt
       
+      - name: Start RabbitMQ
+        uses: namoshek/rabbitmq-github-action@v1
+        with:
+          version: '4.2.1'
+          ports: '5673:5672 15673:15672' # Map ports for AMQP and Management UI
+          container-name: 'rabbitmq'
+
+      - name: Wait for RabbitMQ readiness
+        run: |
+          echo "Waiting for RabbitMQ..."
+          for i in {1..30}; do
+            if nc -z localhost 5673; then
+              echo "RabbitMQ is up"
+              break
+            fi
+            sleep 1
+          done
+
+          nc -z localhost 5673 || (echo "RabbitMQ did NOT start" && exit 1)
+
       - name: Start Flask backend in the background
         working-directory: src/backend
         env:
           MONGO_URL: mongodb://localhost:27019/soa_demo
           # Required by k6 test at src/backend/tests/k6/load_test.js
           RATE_LIMIT_BY_X_FORWARDED_FOR: true
-          RABBITMQ_URL: RABBITMQ_URL=amqp://guest:guest@localhost:5673
+          RABBITMQ_URL: amqp://guest:guest@localhost:5673
         run: |
           # export FLASK_ENV=testing
           export JWT_SECRET_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'));")
@@ -88,7 +101,7 @@ jobs:
         working-directory: src/webhook_delivery_worker
         env:
           MONGO_URL: mongodb://localhost:27019/soa_demo
-          RABBITMQ_URL: RABBITMQ_URL=amqp://guest:guest@localhost:5673
+          RABBITMQ_URL: amqp://guest:guest@localhost:5673
         run: |
           nohup python -m app > webhook_delivery_worker.log 2>&1 &
       
