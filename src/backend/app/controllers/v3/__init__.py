@@ -4,13 +4,9 @@ from flask_restx import Api #, abort
 from flask_jwt_extended.exceptions import (
     NoAuthorizationError,
     InvalidHeaderError,
-    JWTDecodeError,
-    WrongTokenError,
-    RevokedTokenError,
-    UserClaimsVerificationError,
-    FreshTokenRequired,
+    JWTExtendedException,
 )
-from werkzeug.exceptions import Forbidden
+from jwt.exceptions import PyJWTError
 
 v3 = Blueprint("v3", __name__, url_prefix="/api/v3")
 
@@ -56,15 +52,8 @@ def handle_no_auth_error(e):
 def handle_invalid_header(e):
     return { "error": "Invalid Authorization header"}, 422
 
-@_api.errorhandler(JWTDecodeError)
-def handle_invalid_token(e):
-    return { "error": "Invalid token"}, 401
-
-@_api.errorhandler(WrongTokenError)
-@_api.errorhandler(RevokedTokenError)
-@_api.errorhandler(FreshTokenRequired)
-@_api.errorhandler(UserClaimsVerificationError)
-@_api.errorhandler(Forbidden)
+@_api.errorhandler(JWTExtendedException)
+@_api.errorhandler(PyJWTError)
 def handle_bad_token(e):
     return { "error": "Invalid token"}, 401
 
