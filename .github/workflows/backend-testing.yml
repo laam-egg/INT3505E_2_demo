@@ -70,6 +70,7 @@ jobs:
           version: '4.2.1'
           ports: '5673:5672 15673:15672' # Map ports for AMQP and Management UI
           container-name: 'rabbitmq'
+          plugins: "rabbitmq_management"
 
       - name: Wait for RabbitMQ readiness
         run: |
@@ -83,7 +84,20 @@ jobs:
           done
 
           nc -z localhost 5673 || (echo "RabbitMQ did NOT start" && exit 1)
+      
+      - name: Wait for RabbitMQ readiness through Management Console
+        run: |
+          echo "Waiting for RabbitMQ..."
+          for i in {1..30}; do
+            if curl -s -u guest:guest http://localhost:15673/api/overview > /dev/null; then
+              echo "RabbitMQ is ready"
+              break
+            fi
+            sleep 1
+          done
 
+          curl -f -u guest:guest http://localhost:15673/api/overview || (echo "RabbitMQ never became ready" && exit 1)
+        
       - name: Start Flask backend in the background
         working-directory: src/backend
         env:
