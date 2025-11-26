@@ -136,7 +136,20 @@ jobs:
 
           oasdiff changelog --fail-on ERR "$OLD_SPEC" "$NEW_SPEC"
 
-      - name: Backend API Contract Testing with Schemathesis
+      - name: Backward Compatibility Testing with oasdiff (between API v4 and v3)
+        run: |
+          OLD_SPEC="http://localhost:5000/api/v3/swagger.json"
+          NEW_SPEC="http://localhost:5000/api/v4/swagger.json"
+
+          oasdiff changelog --fail-on ERR "$OLD_SPEC" "$NEW_SPEC"
+
+      - name: Backend API Contract Testing with Schemathesis (v3)
+        run: |
+          NEW_SPEC="http://localhost:5000/api/v3/swagger.json"
+
+          schemathesis run "$NEW_SPEC" --checks=content_type_conformance --max-examples=3 --phases=examples
+
+      - name: Backend API Contract Testing with Schemathesis (v4)
         run: |
           NEW_SPEC="http://localhost:5000/api/v3/swagger.json"
 
