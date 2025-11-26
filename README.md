@@ -15,6 +15,7 @@
     - [Backend Load Testing with k6](#backend-load-testing-with-k6)
     - [Backend API Backward Compatibility Testing with oasdiff](#backend-api-backward-compatibility-testing-with-oasdiff)
     - [Backend API Contract Testing with Schemathesis](#backend-api-contract-testing-with-schemathesis)
+    - [Webhooks](#webhooks)
   - [CI/CD](#cicd)
   - [Prometheus + Grafana](#prometheus--grafana)
 
@@ -218,6 +219,13 @@ The above command would only check for `Content-Type`
 conformance of the API under test. Customize the
 flags per Schemathesis' official documentation for
 desired tests.
+
+### Webhooks
+
+```sh
+cd src/backend
+BACKEND_URL=http://localhost:5000/api/v4 python ./tests/webhooks/test.py
+```
 
 ## CI/CD
 

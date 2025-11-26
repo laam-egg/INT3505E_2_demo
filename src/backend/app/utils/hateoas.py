@@ -46,7 +46,10 @@ class HATEOAS:
             wrap_with_marshalling = api.marshal_with(hateoas_model, *args, **kwargs)
 
             def wrapper(*args, **kwargs):
+                status_code = 200
                 content = func(*args, **kwargs)
+                if type(content) == tuple:
+                    content, status_code = content
                 content = serialize_mongo_doc(content)
                 return {
                     "content": content,
@@ -54,7 +57,7 @@ class HATEOAS:
                         "self": self_links(content),
                         "collection": collection_links(content),
                     },
-                }
+                }, status_code
             
             return wrap_with_marshalling(wrapper)
         return decorator

@@ -16,19 +16,6 @@ if not MONGO_URL:
 client = MongoClient(MONGO_URL)
 db = client.get_default_database()
 
-test_books_collection_ = db.books
-test_authors_collection_ = db.authors
-
-patrons_collection = db.patrons
-titles_collection = db.titles
-copies_collection = db.copies
-borrows_collection = db.borrows
-users_collection = db.users
-payments_collection = db.payments
-
-users_collection.create_index("email", unique=True)
-
-
 webhooks_collection = db.webhooks
 # Create compound index for webhooks: UNIQUE for pairs of (targetUrl, eventName)
 webhooks_collection.create_index([("targetUrl", 1), ("eventName", 1)], unique=True)
