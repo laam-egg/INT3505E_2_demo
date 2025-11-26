@@ -3,6 +3,7 @@ from .WebhookService import WebhookService
 from .MessageQueueService import MessageQueueService
 import time
 import requests
+from typing import Literal
 
 class EventDeliveryService:
     """
@@ -10,28 +11,39 @@ class EventDeliveryService:
     Reports success/failure back to backend via MessageQueueService.
     """
     def __init__(self,
+        mode: Literal['master'] | Literal['slave'],
         mq_service: MessageQueueService,
         webhook_service: WebhookService,
         delivery_queue: str = "delivery_queue",
+        delivery_master_to_slave_queue: str = "delivery_master_to_slave_queue",
         report_queue: str = "report_queue",
     ):
         """
         delivery_queue: Queue name to consume events from backend, for delivery.
         report_queue: Queue name to publish delivery reports, to backend.
+        delivery_master_to_slave_queue: Queue name for communication between master and slave processes of the webhook delivery worker.
         """
-        
+
+        self.mode = mode
+
         self.log = LogService("[EventDeliveryService]")
         self.mq = mq_service
         self.webhook_service = webhook_service
         self.delivery_queue = delivery_queue
         self.report_queue = report_queue
+        self.delivery_master_to_slave_queue = delivery_master_to_slave_queue
 
         # Ensure queues exist
         self.mq.declare_queue(self.delivery_queue)
         self.mq.declare_queue(self.report_queue)
+        self.mq.declare_queue(delivery_master_to_slave_queue)
 
-        # Register callback for delivery_queue
-        self.mq.register_callback(self.delivery_queue, self._process_event)
+        if self.mode == 'master':
+            # Register callback for delivery_queue
+            self.mq.register_callback(self.delivery_queue, self._process_delivery_event)
+        elif self.mode == 'slave':
+            # Register callback for delivery_master_to_slave_queue
+            self.mq.register_callback(delivery_master_to_slave_queue, self._process_slave_event)
 
     def _send_to_webhook(self, target_url: str, event_name: str, event_content: dict) -> bool:
         """
@@ -71,8 +83,27 @@ class EventDeliveryService:
             self.log.exception()
             return False
         return True
+    
+    def _forward_webhook_to_slave(self, target_url: str, event_name: str, event_content: dict):
+        """
+        Forwards the webhook information to slaves for actual delivery.
+        """
+        try:
+            message = {
+                "eventName": event_name,
+                "eventContent": event_content,
+                "targetUrl": target_url,
+            }
+            self.mq.publish_message(
+                self.delivery_master_to_slave_queue,
+                message,
+            )
+        except:
+            self.log.exception()
+            return False
+        return True
 
-    def _process_event(self, message: dict):
+    def _process_delivery_event(self, message: dict):
         """
         Internal callback for each event from the delivery_queue.
         Expects message structure:
@@ -117,19 +148,50 @@ class EventDeliveryService:
                         self.log.error(f"Webhook missing targetUrl: {webhook}")
                         continue
 
-                    success = self._send_to_webhook(
+                    self._forward_webhook_to_slave(
                         target_url=target_url,
                         event_name=event_name,
                         event_content=event_content,
                     )
 
-                    self._report_result(
-                        event_name=event_name,
-                        target_url=target_url,
-                        success=success,
-                    )
-                
                 page += 1
+        except:
+            self.log.exception()
+
+    def _process_slave_event(self, message: dict):
+        """
+        Internal callback for each event from the delivery_master_to_slave_queue.
+        Expects message structure:
+        {
+            "eventName": "...",
+            "eventContent": { ... },
+            "targetUrl": "..."
+        }
+        """
+        try:
+            event_name = message.get("eventName")
+            if not event_name:
+                raise ValueError("Message missing eventName")
+            
+            event_content = message.get("eventContent")
+            if not isinstance(event_content, dict):
+                raise ValueError("eventContent must be a dict")
+            
+            target_url = message.get("targetUrl")
+            if not target_url:
+                raise ValueError("Message missing targetUrl")
+
+            success = self._send_to_webhook(
+                target_url=target_url,
+                event_name=event_name,
+                event_content=event_content,
+            )
+
+            self._report_result(
+                event_name=event_name,
+                target_url=target_url,
+                success=success,
+            )
         except:
             self.log.exception()
 

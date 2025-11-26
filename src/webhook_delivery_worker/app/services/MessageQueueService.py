@@ -19,7 +19,7 @@ class MessageQueueService:
         self.rabbitmq_url = rabbitmq_url
 
         params = pika.URLParameters(self.rabbitmq_url)
-        params.heartbeat = 60  # seconds
+        params.heartbeat = 0  # disable heartbeat
         params.blocked_connection_timeout = 30
         self.connection = pika.BlockingConnection(params)
         self.channel = self.connection.channel()

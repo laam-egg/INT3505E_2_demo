@@ -19,10 +19,10 @@ webhook_create_dto = api.model("WebhookCreate", {
     "targetUrl": fields.String(
         required=True, description=(
             "URL đích để gửi event (bằng cách POST với JSON payload gồm eventName và eventContent). "
-            "Trong trường hợp webhook này được yêu cầu xóa, URL này sẽ được gọi với eventName = `webhook.deleted`,"
+            "Trong trường hợp webhook này được yêu cầu xóa, URL này sẽ được gọi với eventName = `webhook.delete`,"
             "và response phải có status code là 2xx. Nếu không webhook sẽ KHÔNG được xóa."
         ),
-        example="http://localhost:5001/webhook-destination",
+        example="http://localhost:4999/webhook-destination",
     ),
 })
 
@@ -105,7 +105,7 @@ class Item(Resource):
 
 
     
-    @api.doc(description="Xóa webhook, theo ID", security="Bearer")
+    @api.doc(description="Xóa webhook, theo ID")
     @h.returns(
         api.model("any", {
             "message": fields.String(description="Kết quả của thao tác xóa"),

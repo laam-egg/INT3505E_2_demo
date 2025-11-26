@@ -111,13 +111,21 @@ jobs:
           flask --version
           nohup flask run --host=0.0.0.0 --port=5000 > flask.log 2>&1 &
       
-      - name: Start Webhook Delivery Worker in the background
+      - name: Start Webhook Delivery Workers in the background
         working-directory: src/webhook_delivery_worker
         env:
           MONGO_URL: mongodb://localhost:27019/soa_demo
           RABBITMQ_URL: amqp://guest:guest@localhost:5673
         run: |
-          nohup python -m app > webhook_delivery_worker.log 2>&1 &
+          nohup python -m app master > webhook_delivery_worker_master.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_1.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_2.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_3.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_4.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_5.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_6.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_7.log 2>&1 &
+          nohup python -m app slave > webhook_delivery_worker_slave_8.log 2>&1 &
       
       - name: Check backend is reachable
         run: |

@@ -29,10 +29,11 @@ BACKEND_URL = BACKEND_URL.rstrip("/") + '/'
 def join_url(base: str, path: str) -> str:
     return urllib.parse.urljoin(base, path.lstrip("/"))
 
-WEBHOOK_TARGET_PORT = 5001  # Port where this script will listen for webhook callbacks
+WEBHOOK_TARGET_DOMAIN = os.getenv("WEBHOOK_TARGET_DOMAIN", "127.0.0.1")
+WEBHOOK_TARGET_PORT = 4999  # Port where this script will listen for webhook callbacks
 WEBHOOK_TARGET_PATH = "/webhook-destination"  # Path for webhook
 # ATTENTION: Webhook target URL must not be localhost
-WEBHOOK_TARGET_URL = f"http://127.0.0.1:{WEBHOOK_TARGET_PORT}{WEBHOOK_TARGET_PATH}"
+WEBHOOK_TARGET_URL = f"http://{WEBHOOK_TARGET_DOMAIN}:{WEBHOOK_TARGET_PORT}{WEBHOOK_TARGET_PATH}"
 
 print(f"[Config] BACKEND_URL = {BACKEND_URL}")
 print(f"[Config] WEBHOOK_TARGET_URL = {WEBHOOK_TARGET_URL}")

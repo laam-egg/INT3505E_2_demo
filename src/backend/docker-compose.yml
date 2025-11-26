@@ -9,20 +9,67 @@ services:
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped
+    healthcheck:
+      # https://stackoverflow.com/a/73783213/13680015
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  rabbitmq:
+    image: rabbitmq:4.2.1-management
+    container_name: rabbitmq
+    ports:
+      - "5673:5672"     # AMQP
+      - "15673:15672"   # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics status >/dev/null 2>&1 || exit 1"]
+      # && curl -s -u guest:guest http://localhost:15672/api/overview >/dev/null 2>&1"
+      interval: 10s
+      timeout: 5s
+      retries: 1
+      start_period: 10s
 
   web:
-    build: .
+    build:
+      context: .
     container_name: flask_app
     ports:
       - "5001:5000"
     environment:
       MONGO_URL: "mongodb://mongo:27017/soa_demo"
+      RABBITMQ_URL: "amqp://guest:guest@rabbitmq:5672/"
       # Leave empty to let entrypoint.sh generate it, or set it here to override
       JWT_SECRET_KEY: ""
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     volumes:
       - .:/app
+    restart: unless-stopped
+    # Note: entrypoint is now handled in the Dockerfile
+  
+  webhook_delivery_workers:
+    build:
+      context: ../webhook_delivery_worker
+    container_name: webhook_delivery_workers
+    environment:
+      MONGO_URL: "mongodb://mongo:27017/soa_demo"
+      RABBITMQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ../webhook_delivery_worker:/app
     restart: unless-stopped
     # Note: entrypoint is now handled in the Dockerfile
 

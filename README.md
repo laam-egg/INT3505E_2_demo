@@ -5,19 +5,21 @@
   - [Tài liệu thiết kế](#tài-liệu-thiết-kế)
   - [Setup](#setup)
     - [Setup: Backend](#setup-backend)
+    - [Setup: Webhook Delivery Worker](#setup-webhook-delivery-worker)
     - [Setup: Frontend](#setup-frontend)
   - [Run](#run)
-    - [Run: Backend](#run-backend)
+    - [Run: Backend and Webhook Delivery Worker](#run-backend-and-webhook-delivery-worker)
     - [Run: Frontend](#run-frontend)
+  - [Prometheus + Grafana](#prometheus--grafana)
+  - [Webhooks](#webhooks)
   - [Testing](#testing)
     - [Backend API Testing with Postman](#backend-api-testing-with-postman)
     - [Backend API Testing with Newman](#backend-api-testing-with-newman)
     - [Backend Load Testing with k6](#backend-load-testing-with-k6)
     - [Backend API Backward Compatibility Testing with oasdiff](#backend-api-backward-compatibility-testing-with-oasdiff)
     - [Backend API Contract Testing with Schemathesis](#backend-api-contract-testing-with-schemathesis)
-    - [Webhooks](#webhooks)
+    - [Webhooks Testing](#webhooks-testing)
   - [CI/CD](#cicd)
-  - [Prometheus + Grafana](#prometheus--grafana)
 
 ![demo image](docs/images/frontend_demo_1.png)
 
@@ -40,11 +42,14 @@
 
 ### Setup: Backend
 
-Yêu cầu Python 3.12+,
-MongoDB 8.0+ (các phiên
+Yêu cầu (các phiên
 bản cũ hơn có thể vẫn
 chạy được, nhưng chưa được
-kiểm chứng.)
+kiểm chứng.):
+
+- Python 3.12+
+- MongoDB 8.0+
+- RabbitMQ 4.2.1+
 
 ```sh
 cd <project_root>
@@ -56,6 +61,31 @@ pip install -r requirements.txt
 ```
 
 Đồng thời trong thư mục `src/backend`,
+copy file `.env.example` vào file mới
+tên là `.env`. Sửa các biến môi trường
+trong file đó cho phù hợp.
+
+### Setup: Webhook Delivery Worker
+
+Yêu cầu (các phiên
+bản cũ hơn có thể vẫn
+chạy được, nhưng chưa được
+kiểm chứng.):
+
+- Python 3.12+
+- MongoDB 8.0+
+- RabbitMQ 4.2.1+
+
+```sh
+cd <project_root>
+cd src/webhook_delivery_worker
+
+virtualenv venv -p $(which python3.12)
+source ./venv/bin/activate
+pip install -r requirements.txt
+```
+
+Đồng thời trong thư mục `src/webhook_delivery_worker`,
 copy file `.env.example` vào file mới
 tên là `.env`. Sửa các biến môi trường
 trong file đó cho phù hợp.
@@ -76,7 +106,9 @@ yarn
 
 ## Run
 
-### Run: Backend
+### Run: Backend and Webhook Delivery Worker
+
+Chạy backend:
 
 ```sh
 cd <project_root>
@@ -84,6 +116,31 @@ cd src/backend
 source ./venv/bin/activate
 
 flask run --host=0.0.0.0 --port=5000
+```
+
+Trong các terminal khác, chạy Event Delivery Worker
+(phục vụ call web hooks). Đầu tiên cần chạy
+Master Worker:
+
+```sh
+cd <project_root>
+cd src/webhook_delivery_worker
+source ./venv/bin/activate
+
+python -m app master
+```
+
+Sau đó chạy `N` Slave Workers, mỗi cái trong
+một terminal riêng (`N` càng lớn càng tốt,
+bởi phần lớn tác vụ trong các worker này
+là I/O-bound chứ không phải CPU-bound):
+
+```sh
+cd <project_root>
+cd src/webhook_delivery_worker
+source ./venv/bin/activate
+
+python -m app slave
 ```
 
 ### Run: Frontend
@@ -111,6 +168,34 @@ yarn dev
 yarn build
 yarn preview
 ```
+
+## Prometheus + Grafana
+
+```sh
+cd <project_root>
+cd src/backend
+
+docker compose up --build
+```
+
+Then access Prometheus dashboard via `http://localhost:9091`,
+and Grafana via `http://localhost:3001`.
+
+On Grafana dashboard, when adding Prometheus datasource,
+enter URL `http://prometheus:9000`.
+
+## Webhooks
+
+[Xem file test](#webhooks-testing)
+để biết thông tin về cách sử dụng
+webhook.
+
+Hiện tại backend cho phép tạo mới
+và delete webhook tùy ý (public API).
+
+Luồng hoạt động hiện tại như sau:
+
+![Webhook Sequence Diagram](docs/images/webhook-sequence-diagram.png)
 
 ## Testing
 
@@ -220,12 +305,24 @@ conformance of the API under test. Customize the
 flags per Schemathesis' official documentation for
 desired tests.
 
-### Webhooks
+### Webhooks Testing
 
 ```sh
 cd src/backend
 BACKEND_URL=http://localhost:5000/api/v4 python ./tests/webhooks/test.py
 ```
+
+Nếu muốn test backend trong Docker container
+([xem phần Prometheus](#prometheus--grafana)):
+
+```sh
+cd src/backend
+WEBHOOK_TARGET_DOMAIN=host.docker.internal BACKEND_URL=http://localhost:5001/api/v4 python ./tests/webhooks/test.py
+```
+
+(notice the new environment variable
+`WEBHOOK_TARGET_DOMAIN`, as well as
+the new port value in `BACKEND_URL`).
 
 ## CI/CD
 
@@ -244,18 +341,3 @@ cd <project_root>
 
 act
 ```
-
-## Prometheus + Grafana
-
-```sh
-cd <project_root>
-cd src/backend
-
-docker compose up --build
-```
-
-Then access Prometheus dashboard via `http://localhost:9091`,
-and Grafana via `http://localhost:3001`.
-
-On Grafana dashboard, when adding Prometheus datasource,
-enter URL `http://prometheus:9000`.
