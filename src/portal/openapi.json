@@ -1,0 +1,2276 @@
+{
+    "swagger": "2.0",
+    "basePath": "/api/v4",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Auth_HATEOAS"
+                        }
+                    }
+                },
+                "description": "\u0110\u0103ng nh\u1eadp",
+                "operationId": "post_login",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/AuthLogin"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/borrows/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/BorrowList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch t\u1ea5t c\u1ea3 c\u00e1c borrows, c\u00f3 pagination. C\u00f3 th\u1ec3 l\u1ecdc theo patronId.",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number",
+                        "default": 0
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page size",
+                        "default": 100
+                    },
+                    {
+                        "name": "patronId",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Patron ID (optional)"
+                    },
+                    {
+                        "name": "copyId",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Copy ID (optional)"
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "borrows"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Borrow_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam borrow m\u1edbi.",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/BorrowCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "borrows"
+                ]
+            }
+        },
+        "/borrows/{borrowId}": {
+            "parameters": [
+                {
+                    "name": "borrowId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Borrow_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y borrow theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "borrows"
+                ]
+            },
+            "patch": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Borrow_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda m\u1ed9t ph\u1ea7n borrow, theo ID",
+                "operationId": "patch_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/BorrowUpdate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "borrows"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/empty_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a borrow, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "borrows"
+                ]
+            }
+        },
+        "/patrons/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/PatronList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch t\u1ea5t c\u1ea3 c\u00e1c patrons, c\u00f3 pagination.",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number",
+                        "default": 0
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page size",
+                        "default": 100
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "patrons"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Patron_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam patron m\u1edbi.",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/PatronCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "patrons"
+                ]
+            }
+        },
+        "/patrons/{patronId}": {
+            "parameters": [
+                {
+                    "name": "patronId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Patron_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda to\u00e0n b\u1ed9 patron, theo ID",
+                "operationId": "put_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/PatronReplace"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "patrons"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Patron_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y patron theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "patrons"
+                ]
+            },
+            "patch": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Patron_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda m\u1ed9t ph\u1ea7n patron, theo ID",
+                "operationId": "patch_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/PatronUpdate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "patrons"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/empty_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a patron, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "patrons"
+                ]
+            }
+        },
+        "/payments/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/PaymentList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch t\u1ea5t c\u1ea3 c\u00e1c payments, c\u00f3 pagination.",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number",
+                        "default": 0
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page size",
+                        "default": 100
+                    },
+                    {
+                        "name": "patronId",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Patron ID (optional)"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Tr\u1ea1ng th\u00e1i c\u1ee7a payment, nh\u1eadn m\u1ed9t trong c\u00e1c gi\u00e1 tr\u1ecb: UNVERIFIED, VERIFIED, CANCELLED, DISVERIFIED"
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "payments"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Payment_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam payment m\u1edbi.",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/PaymentCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "payments"
+                ]
+            }
+        },
+        "/payments/{paymentId}": {
+            "parameters": [
+                {
+                    "name": "paymentId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Payment_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y payment theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "payments"
+                ]
+            },
+            "patch": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Payment_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda m\u1ed9t ph\u1ea7n payment, theo ID",
+                "operationId": "patch_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/PaymentUpdate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "payments"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/empty_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a payment, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "payments"
+                ]
+            }
+        },
+        "/titles/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/TitleList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch t\u1ea5t c\u1ea3 c\u00e1c titles, c\u00f3 pagination.",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number",
+                        "default": 0
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page size",
+                        "default": 100
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "titles"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Title_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam \u0111\u1ea7u s\u00e1ch m\u1edbi.",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/TitleCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "titles"
+                ]
+            }
+        },
+        "/titles/{titleId}": {
+            "parameters": [
+                {
+                    "name": "titleId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Title_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda to\u00e0n b\u1ed9 title, theo ID",
+                "operationId": "put_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/TitleReplace"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "titles"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Title_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y title theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "titles"
+                ]
+            },
+            "patch": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Title_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda m\u1ed9t ph\u1ea7n title, theo ID",
+                "operationId": "patch_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/TitleUpdate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "titles"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/empty_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a title, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "titles"
+                ]
+            }
+        },
+        "/titles/{titleId}/copies/": {
+            "parameters": [
+                {
+                    "name": "titleId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/CopyList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch t\u1ea5t c\u1ea3 c\u00e1c copies c\u1ee7a m\u1ed9t title, c\u00f3 pagination.",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number",
+                        "default": 0
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page size",
+                        "default": 100
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "copies"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Copy_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam b\u1ea3n sao m\u1edbi cho m\u1ed9t \u0111\u1ea7u s\u00e1ch.",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CopyCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "copies"
+                ]
+            }
+        },
+        "/titles/{titleId}/copies/{copyId}": {
+            "parameters": [
+                {
+                    "name": "titleId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "copyId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Copy_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda to\u00e0n b\u1ed9 copy, theo ID",
+                "operationId": "put_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CopyReplace"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "copies"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Copy_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y copy theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "copies"
+                ]
+            },
+            "patch": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Copy_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda m\u1ed9t ph\u1ea7n copy, theo ID",
+                "operationId": "patch_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/CopyUpdate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "copies"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/empty_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a copy, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "copies"
+                ]
+            }
+        },
+        "/users/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/UserList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch c\u00e1c users, c\u00f3 th\u1ec3 l\u1ecdc theo email",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "users"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/User_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam user m\u1edbi (\u0111\u0103ng k\u00fd t\u00e0i kho\u1ea3n).",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/UserCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "users"
+                ]
+            }
+        },
+        "/users/{userId}": {
+            "parameters": [
+                {
+                    "name": "userId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/User_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y user theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "users"
+                ]
+            },
+            "patch": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/User_HATEOAS"
+                        }
+                    }
+                },
+                "description": "S\u1eeda m\u1ed9t ph\u1ea7n user, theo ID",
+                "operationId": "patch_item",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/UserUpdate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "users"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/empty_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a user, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "users"
+                ]
+            }
+        },
+        "/webhooks/": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/WebhookList_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y danh s\u00e1ch c\u00e1c webhooks, c\u00f3 pagination.",
+                "operationId": "get_collection",
+                "parameters": [
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number",
+                        "default": 0
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page size",
+                        "default": 100
+                    },
+                    {
+                        "name": "targetUrl",
+                        "in": "query",
+                        "type": "string",
+                        "description": "URL \u0111\u00edch c\u1ee7a webhook \u0111\u1ec3 filter"
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "webhooks"
+                ]
+            },
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Webhook_HATEOAS"
+                        }
+                    }
+                },
+                "description": "Th\u00eam webhook m\u1edbi.",
+                "operationId": "post_collection",
+                "parameters": [
+                    {
+                        "name": "payload",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/WebhookCreate"
+                        }
+                    },
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "webhooks"
+                ]
+            }
+        },
+        "/webhooks/{webhookId}": {
+            "parameters": [
+                {
+                    "name": "webhookId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/Webhook_HATEOAS"
+                        }
+                    }
+                },
+                "description": "L\u1ea5y th\u00f4ng tin webhook theo ID",
+                "operationId": "get_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "webhooks"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/any_HATEOAS"
+                        }
+                    }
+                },
+                "description": "X\u00f3a webhook, theo ID",
+                "operationId": "delete_item",
+                "parameters": [
+                    {
+                        "name": "X-Fields",
+                        "in": "header",
+                        "type": "string",
+                        "format": "mask",
+                        "description": "An optional fields mask"
+                    }
+                ],
+                "tags": [
+                    "webhooks"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Version 4",
+        "version": "4",
+        "description": "Add webhooks for certain events."
+    },
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": "Add 'Bearer <your_JWT_token>'"
+        }
+    },
+    "tags": [
+        {
+            "name": "patrons",
+            "description": "Ng\u01b0\u1eddi s\u1eed d\u1ee5ng d\u1ecbch v\u1ee5 th\u01b0 vi\u1ec7n, e.g. m\u01b0\u1ee3n s\u00e1ch."
+        },
+        {
+            "name": "titles",
+            "description": "Nh\u00f3m API c\u00f3 nghi\u1ec7p v\u1ee5 qu\u1ea3n l\u00fd \u0111\u1ea7u s\u00e1ch (titles)."
+        },
+        {
+            "name": "copies",
+            "description": "Nh\u00f3m API c\u00f3 nghi\u1ec7p v\u1ee5 qu\u1ea3n l\u00fd c\u00e1c b\u1ea3n sao (copies) c\u1ee7a c\u00e1c \u0111\u1ea7u s\u00e1ch (titles)."
+        },
+        {
+            "name": "borrows",
+            "description": "Bi\u1ec3u di\u1ec5n m\u1ed9t l\u01b0\u1ee3t m\u01b0\u1ee3n s\u00e1ch t\u1eeb th\u01b0 vi\u1ec7n."
+        },
+        {
+            "name": "users",
+            "description": "T\u00e0i kho\u1ea3n ng\u01b0\u1eddi d\u00f9ng h\u1ec7 th\u1ed1ng (qu\u1ea3n tr\u1ecb vi\u00ean, th\u1ee7 th\u01b0...)"
+        },
+        {
+            "name": "auth",
+            "description": "API li\u00ean quan \u0111\u1ebfn \u0111\u0103ng nh\u1eadp, x\u00e1c th\u1ef1c"
+        },
+        {
+            "name": "payments",
+            "description": "Bi\u1ec3u di\u1ec5n m\u1ed9t giao d\u1ecbch thanh to\u00e1n c\u1ee7a patron \u0111\u1ed1i v\u1edbi th\u01b0 vi\u1ec7n."
+        },
+        {
+            "name": "webhooks",
+            "description": "Nh\u00f3m API c\u00f3 nghi\u1ec7p v\u1ee5 qu\u1ea3n l\u00fd c\u00e1c subscriptions/webhooks."
+        }
+    ],
+    "definitions": {
+        "PatronCreate": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Patron name",
+                    "example": "V\u0169 T\u00f9ng L\u00e2m"
+                }
+            },
+            "type": "object"
+        },
+        "PatronList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Patron"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Patron": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Patron name",
+                    "example": "V\u0169 T\u00f9ng L\u00e2m"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "The patron ID",
+                    "readOnly": true
+                },
+                "isPremium": {
+                    "type": "boolean",
+                    "description": "L\u00e0 true n\u1ebfu patron n\u00e0y l\u00e0 premium member c\u1ee7a th\u01b0 vi\u1ec7n (c\u00f3 \u00edt nh\u1ea5t 1 payment \u1ee7ng h\u1ed9)",
+                    "readOnly": true
+                }
+            },
+            "type": "object"
+        },
+        "_links": {
+            "properties": {
+                "self": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "collection": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "Patron_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Patron"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "PatronReplace": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Patron name",
+                    "example": "V\u0169 T\u00f9ng L\u00e2m"
+                }
+            },
+            "type": "object"
+        },
+        "PatronUpdate": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Patron name",
+                    "example": "V\u0169 T\u00f9ng L\u00e2m"
+                }
+            },
+            "type": "object"
+        },
+        "empty_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/empty"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "empty": {
+            "properties": {},
+            "type": "object"
+        },
+        "TitleCreate": {
+            "required": [
+                "authors",
+                "edition",
+                "name",
+                "tags",
+                "yearOfPublication"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "T\u00ean \u0111\u1ea7u s\u00e1ch",
+                    "example": "Principles of Web API Design - Delivering Value with APIs and Microservices"
+                },
+                "edition": {
+                    "type": "integer",
+                    "description": "S\u1ed1 th\u1ee9 t\u1ef1 c\u1ee7a l\u1ea7n t\u00e1i b\u1ea3n",
+                    "example": 1
+                },
+                "authors": {
+                    "type": "string",
+                    "description": "T\u00ean c\u00e1c t\u00e1c gi\u1ea3, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "James Higginbotham"
+                },
+                "yearOfPublication": {
+                    "type": "integer",
+                    "description": "N\u0103m xu\u1ea5t b\u1ea3n",
+                    "example": 2022
+                },
+                "tags": {
+                    "type": "string",
+                    "description": "C\u00e1c th\u1ebb/tags, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "Web\nAPI\nProgramming\nMicroservices"
+                }
+            },
+            "type": "object"
+        },
+        "TitleList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Title"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Title": {
+            "required": [
+                "authors",
+                "edition",
+                "name",
+                "tags",
+                "yearOfPublication"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "T\u00ean \u0111\u1ea7u s\u00e1ch",
+                    "example": "Principles of Web API Design - Delivering Value with APIs and Microservices"
+                },
+                "edition": {
+                    "type": "integer",
+                    "description": "S\u1ed1 th\u1ee9 t\u1ef1 c\u1ee7a l\u1ea7n t\u00e1i b\u1ea3n",
+                    "example": 1
+                },
+                "authors": {
+                    "type": "string",
+                    "description": "T\u00ean c\u00e1c t\u00e1c gi\u1ea3, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "James Higginbotham"
+                },
+                "yearOfPublication": {
+                    "type": "integer",
+                    "description": "N\u0103m xu\u1ea5t b\u1ea3n",
+                    "example": 2022
+                },
+                "tags": {
+                    "type": "string",
+                    "description": "C\u00e1c th\u1ebb/tags, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "Web\nAPI\nProgramming\nMicroservices"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID c\u1ee7a \u0111\u1ea7u s\u00e1ch",
+                    "readOnly": true
+                },
+                "totalCopies": {
+                    "type": "integer",
+                    "description": "T\u1ed5ng s\u1ed1 b\u1ea3n sao c\u1ee7a \u0111\u1ea7u s\u00e1ch n\u00e0y",
+                    "readOnly": true,
+                    "default": 0
+                },
+                "availableCopies": {
+                    "type": "integer",
+                    "description": "S\u1ed1 b\u1ea3n sao \u0111ang c\u00f3 s\u1eb5n (c\u00f3 th\u1ec3 m\u01b0\u1ee3n \u0111\u01b0\u1ee3c)",
+                    "readOnly": true,
+                    "default": 0
+                },
+                "borrowedCopies": {
+                    "type": "integer",
+                    "description": "S\u1ed1 b\u1ea3n sao \u0111ang \u0111\u01b0\u1ee3c m\u01b0\u1ee3n",
+                    "readOnly": true,
+                    "default": 0
+                },
+                "lostCopies": {
+                    "type": "integer",
+                    "description": "S\u1ed1 b\u1ea3n sao \u0111\u00e3 b\u1ecb b\u00e1o h\u1ecfng/m\u1ea5t",
+                    "readOnly": true,
+                    "default": 0
+                }
+            },
+            "type": "object"
+        },
+        "Title_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Title"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "TitleReplace": {
+            "required": [
+                "authors",
+                "edition",
+                "name",
+                "tags",
+                "yearOfPublication"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "T\u00ean \u0111\u1ea7u s\u00e1ch",
+                    "example": "Principles of Web API Design - Delivering Value with APIs and Microservices"
+                },
+                "edition": {
+                    "type": "integer",
+                    "description": "S\u1ed1 th\u1ee9 t\u1ef1 c\u1ee7a l\u1ea7n t\u00e1i b\u1ea3n",
+                    "example": 1
+                },
+                "authors": {
+                    "type": "string",
+                    "description": "T\u00ean c\u00e1c t\u00e1c gi\u1ea3, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "James Higginbotham"
+                },
+                "yearOfPublication": {
+                    "type": "integer",
+                    "description": "N\u0103m xu\u1ea5t b\u1ea3n",
+                    "example": 2022
+                },
+                "tags": {
+                    "type": "string",
+                    "description": "C\u00e1c th\u1ebb/tags, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "Web\nAPI\nProgramming\nMicroservices"
+                }
+            },
+            "type": "object"
+        },
+        "TitleUpdate": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "T\u00ean \u0111\u1ea7u s\u00e1ch",
+                    "example": "Principles of Web API Design - Delivering Value with APIs and Microservices"
+                },
+                "edition": {
+                    "type": "integer",
+                    "description": "S\u1ed1 th\u1ee9 t\u1ef1 c\u1ee7a l\u1ea7n t\u00e1i b\u1ea3n",
+                    "example": 1
+                },
+                "authors": {
+                    "type": "string",
+                    "description": "T\u00ean c\u00e1c t\u00e1c gi\u1ea3, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "James Higginbotham"
+                },
+                "yearOfPublication": {
+                    "type": "integer",
+                    "description": "N\u0103m xu\u1ea5t b\u1ea3n",
+                    "example": 2022
+                },
+                "tags": {
+                    "type": "string",
+                    "description": "C\u00e1c th\u1ebb/tags, ph\u00e2n c\u00e1ch b\u1eb1ng newlines",
+                    "example": "Web\nAPI\nProgramming\nMicroservices"
+                }
+            },
+            "type": "object"
+        },
+        "CopyCreate": {
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "Code/identifier c\u1ee7a b\u1ea3n sao"
+                }
+            },
+            "type": "object"
+        },
+        "CopyList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Copy"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Copy": {
+            "required": [
+                "code",
+                "titleId"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "Code/identifier c\u1ee7a b\u1ea3n sao"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID c\u1ee7a b\u1ea3n sao",
+                    "readOnly": true
+                },
+                "titleId": {
+                    "type": "string",
+                    "description": "ID c\u1ee7a \u0111\u1ea7u s\u00e1ch t\u01b0\u01a1ng \u1ee9ng"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Tr\u1ea1ng th\u00e1i hi\u1ec7n t\u1ea1i c\u1ee7a b\u1ea3n sao: AVAILABLE, BORROWED, or LOST",
+                    "readOnly": true
+                }
+            },
+            "type": "object"
+        },
+        "Copy_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Copy"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "CopyReplace": {
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "Code/identifier c\u1ee7a b\u1ea3n sao"
+                }
+            },
+            "type": "object"
+        },
+        "CopyUpdate": {
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "Code/identifier c\u1ee7a b\u1ea3n sao"
+                }
+            },
+            "type": "object"
+        },
+        "BorrowCreate": {
+            "required": [
+                "copyId",
+                "patronId"
+            ],
+            "properties": {
+                "patronId": {
+                    "type": "string",
+                    "description": "ID ng\u01b0\u1eddi m\u01b0\u1ee3n (patron)"
+                },
+                "copyId": {
+                    "type": "string",
+                    "description": "ID b\u1ea3n sao c\u1ee7a m\u1ed9t s\u00e1ch n\u00e0o \u0111\u00f3 \u0111\u01b0\u1ee3c m\u01b0\u1ee3n"
+                }
+            },
+            "type": "object"
+        },
+        "BorrowList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Borrow"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Borrow": {
+            "required": [
+                "copyId",
+                "patronId",
+                "status"
+            ],
+            "properties": {
+                "patronId": {
+                    "type": "string",
+                    "description": "ID ng\u01b0\u1eddi m\u01b0\u1ee3n (patron)"
+                },
+                "copyId": {
+                    "type": "string",
+                    "description": "ID b\u1ea3n sao c\u1ee7a m\u1ed9t s\u00e1ch n\u00e0o \u0111\u00f3 \u0111\u01b0\u1ee3c m\u01b0\u1ee3n"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID l\u01b0\u1ee3t m\u01b0\u1ee3n",
+                    "readOnly": true
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Tr\u1ea1ng th\u00e1i c\u1ee7a l\u01b0\u1ee3t m\u01b0\u1ee3n: BORROWING, RETURNED, or LOST"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "description": "Th\u1eddi gian m\u01b0\u1ee3n (t\u1ee9c th\u1eddi gian t\u1ea1o l\u01b0\u1ee3t m\u01b0\u1ee3n)",
+                    "readOnly": true
+                },
+                "statusLastUpdatedAt": {
+                    "type": "string",
+                    "description": "Th\u1eddi gian cu\u1ed1i c\u00f9ng tr\u1ea1ng th\u00e1i c\u1ee7a l\u01b0\u1ee3t m\u01b0\u1ee3n n\u00e0y \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt",
+                    "readOnly": true
+                }
+            },
+            "type": "object"
+        },
+        "Borrow_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Borrow"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "BorrowUpdate": {
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "description": "Tr\u1ea1ng th\u00e1i m\u1edbi c\u1ee7a l\u01b0\u1ee3t m\u01b0\u1ee3n: BORROWING, RETURNED, or LOST"
+                }
+            },
+            "type": "object"
+        },
+        "UserCreate": {
+            "required": [
+                "email",
+                "fullName",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Email"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "M\u1eadt kh\u1ea9u"
+                },
+                "fullName": {
+                    "type": "string",
+                    "description": "H\u1ecd t\u00ean \u0111\u1ea7y \u0111\u1ee7"
+                }
+            },
+            "type": "object"
+        },
+        "UserList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/User"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "User": {
+            "required": [
+                "email",
+                "fullName",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Email"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "M\u1eadt kh\u1ea9u"
+                },
+                "fullName": {
+                    "type": "string",
+                    "description": "H\u1ecd t\u00ean \u0111\u1ea7y \u0111\u1ee7"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID l\u01b0\u1ee3t m\u01b0\u1ee3n",
+                    "readOnly": true
+                }
+            },
+            "type": "object"
+        },
+        "User_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/User"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "UserUpdate": {
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Email m\u1edbi"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "M\u1eadt kh\u1ea9u m\u1edbi"
+                },
+                "fullName": {
+                    "type": "string",
+                    "description": "H\u1ecd t\u00ean \u0111\u1ea7y \u0111\u1ee7 m\u1edbi"
+                }
+            },
+            "type": "object"
+        },
+        "AuthLogin": {
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": "Email"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "M\u1eadt kh\u1ea9u"
+                }
+            },
+            "type": "object"
+        },
+        "Auth_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Auth"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Auth": {
+            "required": [
+                "accessToken"
+            ],
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/User"
+                },
+                "accessToken": {
+                    "type": "string",
+                    "description": "Access Token"
+                }
+            },
+            "type": "object"
+        },
+        "PaymentCreate": {
+            "required": [
+                "amount",
+                "currency",
+                "patronId"
+            ],
+            "properties": {
+                "patronId": {
+                    "type": "string",
+                    "description": "Patron ID"
+                },
+                "amount": {
+                    "type": "number",
+                    "description": "L\u01b0\u1ee3ng ti\u1ec1n giao d\u1ecbch"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "\u0110\u1ed3ng ti\u1ec1n giao d\u1ecbch ; vi\u1ebft kh\u00f4ng d\u1ea5u",
+                    "example": "VND"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Tr\u1ea1ng th\u00e1i giao d\u1ecbch ; nh\u1eadn m\u1ed9t trong c\u00e1c gi\u00e1 tr\u1ecb: UNVERIFIED, VERIFIED, CANCELLED, DISVERIFIED",
+                    "default": "UNVERIFIED"
+                }
+            },
+            "type": "object"
+        },
+        "PaymentList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Payment"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Payment": {
+            "required": [
+                "amount",
+                "currency",
+                "patronId"
+            ],
+            "properties": {
+                "patronId": {
+                    "type": "string",
+                    "description": "Patron ID"
+                },
+                "amount": {
+                    "type": "number",
+                    "description": "L\u01b0\u1ee3ng ti\u1ec1n giao d\u1ecbch"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "\u0110\u1ed3ng ti\u1ec1n giao d\u1ecbch ; vi\u1ebft kh\u00f4ng d\u1ea5u",
+                    "example": "VND"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Tr\u1ea1ng th\u00e1i giao d\u1ecbch ; nh\u1eadn m\u1ed9t trong c\u00e1c gi\u00e1 tr\u1ecb: UNVERIFIED, VERIFIED, CANCELLED, DISVERIFIED",
+                    "default": "UNVERIFIED"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "The payment ID",
+                    "readOnly": true
+                }
+            },
+            "type": "object"
+        },
+        "Payment_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Payment"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "PaymentUpdate": {
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "description": "Tr\u1ea1ng th\u00e1i giao d\u1ecbch ; nh\u1eadn m\u1ed9t trong c\u00e1c gi\u00e1 tr\u1ecb: UNVERIFIED, VERIFIED, CANCELLED, DISVERIFIED"
+                }
+            },
+            "type": "object"
+        },
+        "WebhookCreate": {
+            "required": [
+                "eventName",
+                "targetUrl"
+            ],
+            "properties": {
+                "eventName": {
+                    "type": "string",
+                    "description": "T\u00ean event c\u1ea7n subscribe",
+                    "example": "auth.login"
+                },
+                "targetUrl": {
+                    "type": "string",
+                    "description": "URL \u0111\u00edch \u0111\u1ec3 g\u1eedi event (b\u1eb1ng c\u00e1ch POST v\u1edbi JSON payload g\u1ed3m eventName v\u00e0 eventContent). Trong tr\u01b0\u1eddng h\u1ee3p webhook n\u00e0y \u0111\u01b0\u1ee3c y\u00eau c\u1ea7u x\u00f3a, URL n\u00e0y s\u1ebd \u0111\u01b0\u1ee3c g\u1ecdi v\u1edbi eventName = `webhook.delete`,v\u00e0 response ph\u1ea3i c\u00f3 status code l\u00e0 2xx. N\u1ebfu kh\u00f4ng webhook s\u1ebd KH\u00d4NG \u0111\u01b0\u1ee3c x\u00f3a.",
+                    "example": "http://localhost:4999/webhook-destination"
+                }
+            },
+            "type": "object"
+        },
+        "WebhookList_HATEOAS": {
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Webhook"
+                    }
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "Webhook": {
+            "required": [
+                "eventName",
+                "targetUrl"
+            ],
+            "properties": {
+                "eventName": {
+                    "type": "string",
+                    "description": "T\u00ean event c\u1ea7n subscribe",
+                    "example": "auth.login"
+                },
+                "targetUrl": {
+                    "type": "string",
+                    "description": "URL \u0111\u00edch \u0111\u1ec3 g\u1eedi event (b\u1eb1ng c\u00e1ch POST v\u1edbi JSON payload g\u1ed3m eventName v\u00e0 eventContent). Trong tr\u01b0\u1eddng h\u1ee3p webhook n\u00e0y \u0111\u01b0\u1ee3c y\u00eau c\u1ea7u x\u00f3a, URL n\u00e0y s\u1ebd \u0111\u01b0\u1ee3c g\u1ecdi v\u1edbi eventName = `webhook.delete`,v\u00e0 response ph\u1ea3i c\u00f3 status code l\u00e0 2xx. N\u1ebfu kh\u00f4ng webhook s\u1ebd KH\u00d4NG \u0111\u01b0\u1ee3c x\u00f3a.",
+                    "example": "http://localhost:4999/webhook-destination"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID c\u1ee7a webhook",
+                    "readOnly": true
+                }
+            },
+            "type": "object"
+        },
+        "Webhook_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/Webhook"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "any_HATEOAS": {
+            "properties": {
+                "content": {
+                    "$ref": "#/definitions/any"
+                },
+                "_links": {
+                    "$ref": "#/definitions/_links"
+                }
+            },
+            "type": "object"
+        },
+        "any": {
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "K\u1ebft qu\u1ea3 c\u1ee7a thao t\u00e1c x\u00f3a"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "responses": {
+        "ParseError": {
+            "description": "When a mask can't be parsed"
+        },
+        "MaskError": {
+            "description": "When any error occurs on mask"
+        },
+        "NoAuthorizationError": {},
+        "InvalidHeaderError": {},
+        "PyJWTError": {},
+        "JWTExtendedException": {}
+    }
+}
