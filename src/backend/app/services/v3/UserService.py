@@ -40,6 +40,11 @@ class UserService(BaseCRUDService):
             **item_doc,
             "password_hash": password_hash
         }
+        try:
+            del item_doc["password"]
+        except KeyError:
+            pass
+
 
         return super().post_item(item_doc)
     

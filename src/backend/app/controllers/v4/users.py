@@ -27,8 +27,10 @@ user_update_dto = api.model("UserUpdate", {
     "fullName": fields.String(required=False, description="Họ tên đầy đủ mới"),
 })
 
-user_dto = api.clone("User", user_create_dto, {
-    "id": fields.String(readonly=True, description="ID lượt mượn"),
+user_dto = api.clone("User", {
+    "id": fields.String(readonly=True, description="ID người dùng"),
+    "email": fields.String(required=True, description="Email"),
+    "fullName": fields.String(required=True, description="Họ tên đầy đủ"),
 })
 
 ##################################
